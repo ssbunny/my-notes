@@ -507,7 +507,7 @@ Allow: GET, HEAD, PUT
 
 缓存 GET 请求的流程图：
 
-![GET CACHE](http_cache_getcache.png)
+![GET CACHE](img/http_cache_getcache.png)
 
 __过期日期__
 
