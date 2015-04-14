@@ -381,7 +381,7 @@ MIME类型、魔法分类、显式分类、类型协商
 
 `proxy hierarchy` 代理级联方式。
 下一个入口(inbound)代理(靠近服务器)被称为`父代理`,
-下一个出口(outbound)代理(靠近客户端)被称为`子代理`,
+下一个出口(outbound)代理(靠近客户端)被称为`子代理`。
 
 代理层次结构可以是动态的，随请求而变。
 
@@ -580,13 +580,94 @@ Cache-Control: s-maxage=3600
 | 指令                           | 目的                                               |
 |:------------------------------ |:-------------------------------------------------- |
 | Cache-Control: max-stale       | 缓存可以随意提供过期文件(放松缓存规则)             |
-| Cache-Control: max-stale=<s>   | 在时间 s 秒内，文档不能过期                        |
-| Cache-Control: min-fresh=<s>   | 至少在未来 s 秒内文档要保持新鲜(严格规则)          |
-| Cache-Control: max-age=<s>     | 缓存无法返回缓存时间长于 s 秒的文档(严格规则)      |
+| Cache-Control: max-stale=s     | 在时间 s 秒内，文档不能过期                        |
+| Cache-Control: min-fresh=s     | 至少在未来 s 秒内文档要保持新鲜(严格规则)          |
+| Cache-Control: max-age=s       | 缓存无法返回缓存时间长于 s 秒的文档(严格规则)      |
 | Cache-Control: no-cache        | 除非资源进行了再验证，否则客户端不接受已缓存的资源 |
 | Pragma: no-cache               | HTTP/1.0+ 同上                                     |
 | Cache-Control: no-store        | 缓存应该尽快从存储器中删除文档的所有痕迹           |
 | Cache-Control: only-if-cached  | 只有当缓存中有副本存在时，客户端才会获取一份副本   |
+
+
+
+
+
+
+
+
+
+## 集成点
+
+
+### 网关
+
+`gateway` 抽象出了一种能够到达资源的方法，是资源和应用程序之间的粘合剂。
+
+Web网关在一侧使用HTTP协议，另一侧使用另一种协议：
+
+``````xml
+<客户端协议>/<服务器端协议>
+``````
+
+例如: `HTTP/NNTP`
+
+__协议网关__
+
+HTTP/*、 HTTP/HTTPS、 HTTPS/HTTP(安全加速器网关)
+
+__资源网关__
+
+CGI(通用网关接口)、扩展API(RPC等)
+
+__Web Service__
+
+Web应用程序之间相互通信的标准和协议，用XML通过SOAP来交换信息。
+
+
+### 隧道
+
+通过CONNECT方法请求隧道网关创建一条到达任意目的服务器和端口的TCP连接，
+并对客户端和服务器之间的后继数据进行盲转发。
+
+__CONNECT请求__
+
+``````
+CONNECT home.netscape.com:443 HTTP/1.0
+User-Agent: Mozilla/4.0
+``````
+
+和其它HTTP方法类似，只是URI变成 `host:port` 形式。
+
+__CONNECT响应__
+
+``````
+HTTP/1.0 200 Connection Established
+Proxy-Agent: Netscape-Proxy/1.1
+``````
+
+响应中不需要包含 `Content-Type` .
+
+__SSL隧道__
+
+将原始的加密数据放在HTTP报文中，通过普通的HTTP信道传送。
+
+### 中继
+
+`relay` 是没有完全遵循HTTP规范的简单HTTP代理。
+中继负责处理HTTP中建立连接的部分，然后对字节进行盲转发。
+
+由于中继无法正确处理 `Connection` 首部，所以有潜在的挂起 `keep-alive` 连接的可能。
+
+
+
+
+
+
+
+
+
+
+
 
 
 
