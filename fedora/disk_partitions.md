@@ -17,7 +17,7 @@ the partition naming scheme　used　by Linux systems, and related topics.
 If you are comfortable with disk partitions,
 you can skip ahead to　Section 2,　“Strategies for　Disk　Repartitioning” for more information on the process of freeing up disk space to prepare for a Fedora　installation.
 
-如何你对磁盘分区感兴趣，可以直接跳至第2小节<磁盘重新分区策略>，
+如果你对磁盘分区感兴趣，可以直接跳至第2小节《磁盘重新分区策略》，
 以便了解更多关于Fedora安装时释放磁盘空间的过程。
 
 ## 1.Hard Disk Basic Concepts 硬盘的基本概念
@@ -41,6 +41,7 @@ Figure 1, “An Unused Disk Drive”, shows a brand-new, unused disk drive.
 ![An Unused Disk Drive](img/disk_partition_1.png)
 
 Figure 1　An Unused Disk Drive
+
 图1 未使用的磁盘驱动器
 
 
@@ -53,6 +54,7 @@ To store data on a disk drive,　it is necessary to format the disk drive　firs
 ![Disk Drive with a File System](img/disk_partition_2.png)
 
 Figure 2. Disk Drive with a File System
+
 图2 带有文件系统的磁盘驱动器
 
 As Figure 2, “Disk Drive with a File System”, implies, the order imposed by a file system involves some trade-offs:
@@ -73,6 +75,7 @@ variety of file systems (including many commonly used by other operating systems
 ![Disk Drive with a Different File System](img/disk_partition_3.png)
 
 Figure 3. Disk Drive with a Different File System
+
 图3 装有不同文件系统的磁盘驱动器
 
 Writing a file system to disk is only the first step. The goal of this process is to actually store and retrieve data. The figure below shows a drive disk after some data have been written to it:
@@ -82,6 +85,7 @@ Writing a file system to disk is only the first step. The goal of this process i
 ![Disk Drive with Data Written to It](img/disk_partition_4.png)
 
 Figure 4. Disk Drive with Data Written to It
+
 图4 写入数据的磁盘驱动器
 
 As Figure 4, “Disk Drive with Data Written to It”, shows, some of the previously-empty blocks are now holding data. However, by just looking at this picture, we cannot determine exactly how many files
@@ -92,6 +96,47 @@ reside on this drive. There may only be one file or many, as all files use at le
 As with most computer-related technologies, disk drives changed over time after their introduction. In particular, they got bigger. Not larger in physical size, but bigger in their capacity to store information. And, this additional capacity drove a fundamental change in the way disk drives were used.
 
 和大多数计算机相关技术一样，磁盘驱动器技术自诞生之日起曾发生多次变化。特别是，它们变得越来越大。并不是说它们的实际尺寸在变大，而是存储信息的容量变的越来越大。同时，多出来的容量也给磁盘驱动器的使用方式带来了根本性的变革。
+
+### 1.2. Partitions: Turning One Drive Into Many 分区：将一个驱动器划分为多个
+
+Disk drives can be divided into partitions. Each partition can be accessed as if it was a separate disk. This is done through the addition of a partition table.
+
+磁盘驱动器可以划分成多个 `分区` ，每个分区均可以被当作独立的磁盘访问。分区操作通过磁盘分区表完成。
+
+There are several reasons for allocating disk space into separate disk partitions, for example:
+
+有很多将磁盘空间分成独立的磁盘分区的原因，例如：
+
+* Logical separation of the operating system data from the user data
+* 实现操作系统数据和用户数据的逻辑分离
+* Ability to use different file systems
+* 提供使用不同文件系统的能力
+* Ability to run multiple operating systems on one machine
+* 提供在一台机器上运行多个操作系统的能力
+
+There are currently two partitioning layout standards for physical hard disks: Master Boot Record (MBR) and GUID Partition Table (GPT). MBR is an older method of disk partitioning used with BIOS-based computers. GPT is a newer partitioning layout that is a part of the Unified Extensible Firmware Interface (UEFI). This section and Section B.1.3, “Partitions Within Partitions - An Overview of Extended Partitions” mainly describe the Master Boot Record (MBR) disk partitioning scheme. For information about the GUID Partition Table (GPT) partitioning layout, see Section B.1.4, “GUID Partition Table (GPT)”.
+
+目前有两种硬盘分区配置标准：主引导记录(Master Boot Record, MBR)和 GUID 分区表(GUID Partition Table, GPT). MBR是基于BIOS的电脑的一种老的分区方法，而GPT是一种新的分区方法，它是统一可扩展固件接口(UEFI)的一部分。该小节以及1.3小节主要描述 MBR 分区模式。关于 GPT 分区，参见第1.4小节。
+
+> While the diagrams in this chapter show the partition table as being
+> separate from the actual disk drive, this is not entirely accurate.
+> In reality, the partition table is stored at the very start of the disk,
+> before any file system or user data. But for clarity,
+> they are separate in our diagrams.
+> 由于本章中的图表展示的分区表和实际的磁盘驱动器是分离的，因此并不完全准确。事实上，
+> 分区表存储在磁盘的始端，位于任何文件系统或用户数据之前，但为了清晰起见，
+> 在我们的图表中将其分离出来。
+
+![Disk Drive with Partition Table](img/disk_partition_5.png)
+
+Figure 5. Disk Drive with Partition Table
+
+
+
+
+
+
+
 
 
 
