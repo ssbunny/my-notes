@@ -65,17 +65,18 @@ __umask__ 在配置文件 `/etc/bashrc` 中，通常umask设定为 `022` .
 
 管理用户、用户组的命令：
 
-| 命令 ｜ 描述 ｜
-|:---- |:------ |
-| id | 显示用户及用户组ID |
-| useradd, usermod, userdel | 增加、修改、删除用户的标准命令 |
+| 命令                        ｜ 描述                          ｜
+|:--------------------------- |:------------------------------ |
+| id                          | 显示用户及用户组ID             |
+| useradd, usermod, userdel   | 增加、修改、删除用户的标准命令 |
 | groupadd, groupmod, groupdel | 增加、修改删除用户组的标准命令|
-| gpasswd | 管理 `/etc/group` 配置文件 |
-| pwck, grpck | 检验密码、组等相关信息的命令  |
-| pwconv, pwunconv | password与shadow password之间的转换 |
-| grpconv, grpunconv | group shadow |
+| gpasswd                     | 管理 `/etc/group` 配置文件     |
+| pwck, grpck                 | 检验密码、组等相关信息的命令   |
+| pwconv, pwunconv            | password与shadow password之间的转换 |
+| grpconv, grpunconv          | group shadow                   |
 
 ``````bash
+
 sudo useradd zhangsan # 默认增加的用户是locked
 passwd zhangsan # 指定密码并unlock用户
 ``````
