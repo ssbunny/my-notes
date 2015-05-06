@@ -123,6 +123,7 @@ There are currently two partitioning layout standards for physical hard disks: M
 > In reality, the partition table is stored at the very start of the disk,
 > before any file system or user data. But for clarity,
 > they are separate in our diagrams.
+
 > 由于本章中的图表展示的分区表和实际的磁盘驱动器是分离的，因此并不完全准确。事实上，
 > 分区表存储在磁盘的始端，位于任何文件系统或用户数据之前，但为了清晰起见，
 > 在我们的图表中将其分离出来。
@@ -131,7 +132,20 @@ There are currently two partitioning layout standards for physical hard disks: M
 
 Figure 5. Disk Drive with Partition Table
 
+图5 带有分区表的磁盘驱动器
 
+As Figure 5, “Disk Drive with Partition Table” shows, the partition table is divided into four sections or four primary partitions. A primary partition is a partition on a hard drive that can contain only one logical drive (or section). Each section can hold the information necessary to define a single partition, meaning that the partition table can define no more than four partitions.
+
+图5 展示出分区表分成四部分或者说四个主分区。主分区是这样一种硬盘分区，它只能包含一个逻辑驱动器(或一部分)，每部分持有其所需信息以定义独立的分区，这意味着分区表最多可定义四个分区。
+
+Each partition table entry contains several important characteristics of the partition:
+
+
+
+
+• The points on the disk where the partition starts and ends
+• Whether the partition is "active"
+• The partition's type
 
 
 
