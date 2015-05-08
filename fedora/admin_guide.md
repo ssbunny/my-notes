@@ -10,7 +10,7 @@
 
 通过修改配置 `/etc/locale.conf` 或 `localectl` 命令。
 
-``````bash
+``````sh
 localectl status
 localectl list-locales | grep zh_
 localectl set-locale LANG=en_US.utf8
@@ -26,7 +26,7 @@ RTC通常采用UTC，也可以使用本地时间。
 
 基于systemd的新命令：
 
-``````bash
+``````sh
 timedatectl  # 当前时间信息
 sudo timedatectl set-time 11:22:33
 sudo timedatectl set-local-rtc yes  # RTC时钟采用本地时间，设置为no采用UTC
@@ -39,7 +39,7 @@ sudo timedatectl set-ntp yes # 开启时间同步服务
 
 传统的date命令：
 
-``````bash
+``````sh
 date # local time
 date --utc
 date +"%Y-%m-%d %H:%M:%S"
@@ -51,7 +51,7 @@ sudo date --set 2013-04-05 11:22:33
 传统操作RTC的命令，
 `hwclock` 保存其设置在 `/etc/adjtime` 文件中：
 
-``````bash
+``````sh
 sudo hwclock
 sudo hwclock --set --date "21 Oct 2014 21:17"
 sudo hwclock --systohc # 用system time设置hardware clock
@@ -83,7 +83,7 @@ passwd zhangsan # 指定密码并unlock用户
 
 __/etc/passwd__文件解释：
 
-``````bash
+``````sh
 zhs:x:1000:1000:ZhangSan:/home/zhs:/bin/bash
 ``````
 
@@ -97,7 +97,7 @@ zhs:x:1000:1000:ZhangSan:/home/zhs:/bin/bash
 
 __/etc/shadow__文件解释：
 
-``````bash
+``````sh
 zhs:!!:14798:0:99999:7:::
 ``````
 
@@ -113,7 +113,7 @@ zhs:!!:14798:0:99999:7:::
 
 __/etc/group__文件解释：
 
-``````bash
+``````sh
 ssbunny:x:1000:ssbunny
 ``````
 
@@ -126,7 +126,7 @@ ssbunny:x:1000:ssbunny
 
 更改密码使用寿命：
 
-``````bash
+``````sh
 chage [options] username
 ``````
 
@@ -172,19 +172,13 @@ idle 120 lockscreen
 autodetach off
 ``````
 
-> __创建组目录__
+__创建组目录__
 
-> mkdir /opt/myproject
-
-> groupadd myproject
-
-> chown root:myproject /opt/myproject
-
-> chmod 2775 /opt/myproject
-
-> usermod -aG myproject username
-
-
-
-
+``````sh
+mkdir /opt/myproject
+groupadd myproject
+chown root:myproject /opt/myproject
+chmod 2775 /opt/myproject
+usermod -aG myproject username
+`````
 
