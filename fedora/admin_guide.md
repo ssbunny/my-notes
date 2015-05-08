@@ -129,3 +129,62 @@ ssbunny:x:1000:ssbunny
 ``````bash
 chage [options] username
 ``````
+
+__自动登出__
+
+使用户通过虚拟控制台或远程登录时，间隔一段时间不操作则自动登出。
+
+1. 安装 screen 包
+
+``````sh
+sudo yum install screen
+``````
+
+2. 在 `/etc/profile` 开头加入
+
+``````sh
+trap "" 1 2 3 15
+``````
+
+3. 在 `/etc/profie` 结尾加入
+
+``````sh
+SCREENEXEC="screen"
+if [ -w $(tty) ]; then
+trap "exec $SCREENEXEC" 1 2 3 15
+echo -n 'Starting session in 10 seconds'
+sleep 10
+exec $SCREENEXEC
+fi
+``````
+
+4. 在 `/etc/screenrc` 结尾加入
+
+``````sh
+idle 120 quit
+autodetach off
+``````
+
+或锁定屏幕：
+
+``````sh
+idle 120 lockscreen
+autodetach off
+``````
+
+> __创建组目录__
+
+> mkdir /opt/myproject
+
+> groupadd myproject
+
+> chown root:myproject /opt/myproject
+
+> chmod 2775 /opt/myproject
+
+> usermod -aG myproject username
+
+
+
+
+
