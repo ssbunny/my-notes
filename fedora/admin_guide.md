@@ -134,19 +134,19 @@ __自动登出__
 
 使用户通过虚拟控制台或远程登录时，间隔一段时间不操作则自动登出。
 
-1. 安装 screen 包
+1.安装 screen 包
 
 ``````sh
 sudo yum install screen
 ``````
 
-2. 在 `/etc/profile` 开头加入
+2.在 `/etc/profile` 开头加入
 
 ``````sh
 trap "" 1 2 3 15
 ``````
 
-3. 在 `/etc/profie` 结尾加入
+3.在 `/etc/profie` 结尾加入
 
 ``````sh
 SCREENEXEC="screen"
@@ -158,7 +158,7 @@ exec $SCREENEXEC
 fi
 ``````
 
-4. 在 `/etc/screenrc` 结尾加入
+4.在 `/etc/screenrc` 结尾加入
 
 ``````sh
 idle 120 quit
