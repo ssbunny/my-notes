@@ -151,10 +151,10 @@ trap "" 1 2 3 15
 ``````sh
 SCREENEXEC="screen"
 if [ -w $(tty) ]; then
-trap "exec $SCREENEXEC" 1 2 3 15
-echo -n 'Starting session in 10 seconds'
-sleep 10
-exec $SCREENEXEC
+  trap "exec $SCREENEXEC" 1 2 3 15
+  echo -n 'Starting session in 10 seconds'
+  sleep 10
+  exec $SCREENEXEC
 fi
 ``````
 
@@ -181,4 +181,71 @@ chown root:myproject /opt/myproject
 chmod 2775 /opt/myproject
 usermod -aG myproject username
 `````
+
+## 包管理
+
+### 1.YUM常用命令
+
+``````sh
+yum check-update # 检查哪些已安装包可更新
+yum update mypackage # 更新指定包
+yum update # 更新所有包
+yum search term1 term2 # 按关键字查找包
+yum list mypack* # 列出指定包
+yum list all
+yum list installed
+yum list available
+yum grouplist # 列出package groups
+yum repolist # 列出仓库信息
+yum info mypackage
+yumdb info yum ＃查寻YUM数据库
+yum install
+yum groupinstall ＃同yum install ＠group
+yum remove
+yum history list
+yum history summary
+yum history info
+``````
+
+### 2.配置YUM
+
+YUM配置文件: `/etc/yum.conf` 。分为 `[main]` 和 `[repository]` 两部分。
+[repository]部分通常在 `/etc/yum.repos.d` 目录下通过独立的文件配置。
+
+``````sh
+＃__/etc/yum.conf__配置示例：
+[main]
+cachedir=/var/cache/yum/$basearch/$releasever
+keepcache=2
+debuglevel=2
+logfile=/var/log/yum.log
+exactarch=1
+obsoletes=1
+gpgcheck=1
+plugins=1
+installonly_limit=3
+``````
+
+[main]配置选项：
+
+* `assumeyes`: **0**(默认)带提示信息，**1**不带提示信息，相当于yum -y
+* `cachedir`: Yum缓存及数据库存放的绝对路径
+* `debuglevel`: **1**到**10**级，越大调试信息越详细，默认为**2**，**0**表示禁用
+* `exactarch`: **0**不包含系统架构信息；**1**(默认)包含架构信息，i686不会更新i386架构的包。
+* `exclude`: 安装或更新时要排除的包列表
+* `gpgcheck`: **0**关闭GPG签名；**1**(默认)开启GPG签名
+* `groupremove_leaf_only`: **0**(默认)删除时**不**检查依赖；**1**删除时检查依赖
+* `installonlypkgs`: 只安装不更新的包列表
+* `installonly_limit`: installonlypkgs的列表上限，**0**禁用此特性，**3**默认
+* `keepcache`:**0**(默认)不保存成功安装后的包；**1**保存
+* `logfile`: yum的日志文件存放位置
+* `multilib_policy`: **best**安装系统最匹配的包，如AMD64只安装64bit的包；**all**安装所有包
+* `obsoletes`: **1**(默认)激活旧式进程逻辑；**0**禁用
+* `plugins`: **0**全局禁用所有插件(不推荐)；**1**全局开启所有插件
+* `reposdir`: 寻找仓库文件的目录，默认为/etc/yum.repos.d/
+* `retries`: yum返回错误前的重试次数，**0**表示一直重试，默认为**10**
+
+[repository]配置选项：
+
+
 
