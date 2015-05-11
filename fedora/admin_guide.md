@@ -3,6 +3,24 @@
 *System Administrator's Guide*
 *- Deployment, Configuration, and Administration of Fedora 21*
 
+> 1 - commands
+
+> 2 - system calls
+
+> 3 - library calls
+
+> 4 - special files
+
+> 5 - file formats and convertions
+
+> 6 - games for linux
+
+> 7 - macro packages and conventions
+
+> 8 - system management commands
+
+> 9 - others
+
 
 ## 基本配置
 
@@ -331,3 +349,34 @@ systemctl restart service_name.service
 
 ### 2.OpenSSH
 
+有两类不同的配置：客户端程序(ssh,scp,sftp)和服务端(sshd)。
+系统级的配置在 `/etc/ssh/` 目录下，用户级的配置在 `~/.ssh/` 下。
+
+系统配置：
+
+|  文件                           | 描述                                 |
+|:--------------------------------|:-------------------------------------|
+| /etc/ssh/moduli                 | 模数文件(ps: 很高端，不打算弄懂)     |
+| /etc/ssh/ssh_config             | SSH客户端配置，会被~/.ssh/config覆盖 |
+| /etc/ssh/sshd_config            | sshd进程的配置文件                   |
+| /etc/ssh/ssh_host_ecdsa_key     | sshd进程使用的私有ECDSA key          |
+| /etc/ssh/ssh_host_ecdsa_key.pub | sshd进程使用的公有ECDSA key          |
+| /etc/ssh/ssh_host_key           | sshd进程版本1使用的RSA私有key        |
+| /etc/ssh/ssh_host_key.pub       | sshd进程版本1使用的RSA公有key        |
+| /etc/ssh/ssh_host_rsa_key       | sshd进程版本2使用的RSA私有key        |
+| /etc/ssh/ssh_host_rsa_key.pub   | sshd进程版本2使用的RSA公有key        |
+| /etc/pam.d/sshd                 | sshd进程使用的PAM配置文件            |
+| /etc/sysconfig/sshd             | sshd服务的配置文件                   |
+
+用户配置：
+
+| 文件                   | 描述                 |
+|:-----------------------|:---------------------|
+| ~/.ssh/authorized_keys | 一组server认证公钥   |
+| ~/.ssh/id_ecdsa        | user的ECDSA私有key   |
+| ~/.ssh/id_ecdsa.pub    | ECDSA公有key         |
+| ~/.ssh/id_rsa          | ssh版本2 RSA私有key  |
+| ~/.ssh/id_rsa/pub      | ssh版本2 RSA公有key  |
+| ~/.ssh/identity        | ssh版本1 RSA私有key  |
+| ~/.ssh/identity.pub    | ssh版本1  RSA公有key |
+| ~/.ssh/known_hosts     | server给的host key   |
