@@ -213,7 +213,7 @@ YUM配置文件: `/etc/yum.conf` 。分为 `[main]` 和 `[repository]` 两部分
 [repository]部分通常在 `/etc/yum.repos.d` 目录下通过独立的文件配置。
 
 ``````sh
-＃__/etc/yum.conf__配置示例：
+＃/etc/yum.conf配置示例：
 [main]
 cachedir=/var/cache/yum/$basearch/$releasever
 keepcache=2
@@ -270,8 +270,64 @@ echo "Fedora" > /etc/yum/vars/osname
 
 ``````sh
 yum-config-manager main # 查看main配置
-yum-config-manager --add-repo *repository_url* # 增加仓库
-yum-config-manager --enable *repository* # 启用仓库
-yum-config-manager --disable *repository*
+yum-config-manager --add-repo [repository_url] # 增加仓库
+yum-config-manager --enable [repository] # 启用仓库
+yum-config-manager --disable [repository]
 ``````
+
+创建仓库： **createrepo**
+
+``````sh
+#所有需要的包放置在/mnt/local_repo/下
+createrepo --database /mnt/local_repo
+``````
+
+### 3.Yum插件
+
+``````sh
+yum update --noplugins
+yum update --disableplugin=plugin_name
+yum install plugin_name
+``````
+
+## 基础架构服务
+
+### 1.服务和守护进程
+
+通过**systemctl**命令管理服务，Fedora 21中不推荐使用init脚本中古老的
+**ntsysv**及**chkconfig**命令(使用/etc/rc.d/init.d)。
+
+在boot时启用或停用服务：
+
+``````sh
+systemctl enable service_name.service
+systemctl disable service_name.service
+``````
+
+检查服务状态：
+
+``````sh
+systemctl is-active service_name.service
+systemctl status service_name.service
+systemctl list-units --type=service # 列表显示
+``````
+
+列表字段含义：
+
+* __UNIT__ systemd unit名称，这里是服务名
+* __LOAD__ systemd unit是否加载
+* __ACTIVE__ 高级别unit激活状态
+* __SUB__ 低级别unit激活状态
+* __JOB__ 该unit挂起的job
+* __DESCRIPTION__ 描述信息
+
+服务的启停：
+
+``````sh
+systemctl start service_name.service
+systemctl stop service_name.service
+systemctl restart service_name.service
+``````
+
+### 2.OpenSSH
 
