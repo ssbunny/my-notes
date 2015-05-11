@@ -226,7 +226,7 @@ plugins=1
 installonly_limit=3
 ``````
 
-[main]配置选项：
+__[main]__配置选项：
 
 * `assumeyes`: **0**(默认)带提示信息，**1**不带提示信息，相当于yum -y
 * `cachedir`: Yum缓存及数据库存放的绝对路径
@@ -245,7 +245,33 @@ installonly_limit=3
 * `reposdir`: 寻找仓库文件的目录，默认为/etc/yum.repos.d/
 * `retries`: yum返回错误前的重试次数，**0**表示一直重试，默认为**10**
 
-[repository]配置选项：
+__[repository]__配置选项：
 
+* `name`: 仓库名
+* `baseurl`: url
+* `enabled`: **0**禁用此仓库；**1**启用
 
+YUM 变量：
+
+* `$releasever`
+* `$arch`
+* `$basearch`
+* `$YUM0-9`
+
+增加自己的变量在 `/etc/yum/vars/` 下增加文件：
+
+``````sh
+echo "Fedora" > /etc/yum/vars/osname
+``````
+
+这样就可以在 **.repo** 文件中使用 **$osname** 变量
+
+配置命令： **yum-config-manager**
+
+``````sh
+yum-config-manager main # 查看main配置
+yum-config-manager --add-repo *repository_url* # 增加仓库
+yum-config-manager --enable *repository* # 启用仓库
+yum-config-manager --disable *repository*
+``````
 
