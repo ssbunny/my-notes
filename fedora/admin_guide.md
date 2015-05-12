@@ -459,4 +459,11 @@ ssh -L local-port:remote-hostname:remote-port username@hostname
 #只要ssh到的host能访问的局域网主机，都有可能被转发至本地
 ``````
 
-### 3.
+### 3.TigerVNC
+
+用于提供图形化桌面访问。(ps:不怎么使用，略了)
+
+``````sh
+yum install tigervnc-server #服务端
+yum install tigervnc #客户端浏览器，Windows也有相应工具
+``````
