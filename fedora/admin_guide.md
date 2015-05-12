@@ -4,23 +4,14 @@
 *- Deployment, Configuration, and Administration of Fedora 21*
 
 > 1 - commands
-
 > 2 - system calls
-
 > 3 - library calls
-
 > 4 - special files
-
 > 5 - file formats and convertions
-
 > 6 - games for linux
-
 > 7 - macro packages and conventions
-
 > 8 - system management commands
-
 > 9 - others
-
 
 ## 基本配置
 
@@ -216,9 +207,9 @@ yum list available
 yum grouplist # 列出package groups
 yum repolist # 列出仓库信息
 yum info mypackage
-yumdb info yum ＃查寻YUM数据库
+yumdb info yum # 查寻YUM数据库
 yum install
-yum groupinstall ＃同yum install ＠group
+yum groupinstall # 同yum install ＠group
 yum remove
 yum history list
 yum history summary
@@ -380,3 +371,32 @@ systemctl restart service_name.service
 | ~/.ssh/identity        | ssh版本1 RSA私有key  |
 | ~/.ssh/identity.pub    | ssh版本1  RSA公有key |
 | ~/.ssh/known_hosts     | server给的host key   |
+
+__启动OpenSSH服务器__
+
+``````sh
+#管理脚本
+systemctl start sshd.service
+systemctl stop sshd.service
+systemctl enable sshd.service
+``````
+
+启动SSH服务时，关闭其它不安全的连接：
+
+``````sh
+systemctl stop telnet.service
+systemctl stop rsh.service
+systemctl stop rlogin.service
+systemctl stop vsftpd.service
+``````
+
+为了更安全起见，使用key pairs进行认证，需要先把密码认证关闭：
+将 `/etc/ssh/sshd_config` 下的 `PasswordAuthentication` 设置为 `no`,
+为每个用户生成独立的key.
+
+注意：不要使用root用户生成，否则只有root用户能使用。
+
+``````sh
+ssh-keygen -t rsa #生成~/.ssh/id_rsa
+ssh-copy-id -i ~/.ssh/id_rsa/pub user@hostname #copy到远程主机
+``````
