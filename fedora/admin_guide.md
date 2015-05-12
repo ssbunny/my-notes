@@ -400,3 +400,63 @@ systemctl stop vsftpd.service
 ssh-keygen -t rsa #生成~/.ssh/id_rsa
 ssh-copy-id -i ~/.ssh/id_rsa/pub user@hostname #copy到远程主机
 ``````
+
+客户端登录：
+
+``````sh
+ssh username@hostname
+``````
+
+检查指纹的方法：
+
+``````sh
+ssh-keygen -l -f /etc/ssh/ssh_host_ecdsa_key.pub
+``````
+
+从~/.ssh/known_hosts中删除host:
+
+``````sh
+ssh-keygen -R github.com
+``````
+
+不登录shell直接执行命令：
+
+``````sh
+ssh [username@]hostname command
+``````
+
+通过SSH远程传文件：
+
+``````sh
+scp localfile username@hostname:remotefile
+scp ~/dirs/* username@hostname:~/dirs/ #传目录
+scp username@hostname:remotefile localfile #从远程传至本地
+``````
+
+安全ftp:
+
+``````sh
+~]$ sftp username@hostname
+sftp> ls [directory]
+sftp> cd directory
+sftp> mkdir directory
+sftp> rmdir directory
+sftp> put localfile [remotefile]
+sftp> get remotefile [localfilen]
+``````
+
+X11转发：
+
+``````sh
+ssh -Y username@hostname
+#之后可以通过shell启动X程序
+``````
+
+端口转发：
+
+``````sh
+ssh -L local-port:remote-hostname:remote-port username@hostname
+#只要ssh到的host能访问的局域网主机，都有可能被转发至本地
+``````
+
+### 3.
