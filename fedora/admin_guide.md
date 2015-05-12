@@ -3,15 +3,15 @@
 *System Administrator's Guide*
 *- Deployment, Configuration, and Administration of Fedora 21*
 
-> 1 - commands
-> 2 - system calls
-> 3 - library calls
-> 4 - special files
-> 5 - file formats and convertions
-> 6 - games for linux
-> 7 - macro packages and conventions
-> 8 - system management commands
-> 9 - others
+> * 1 - commands
+> * 2 - system calls
+> * 3 - library calls
+> * 4 - special files
+> * 5 - file formats and convertions
+> * 6 - games for linux
+> * 7 - macro packages and conventions
+> * 8 - system management commands
+> * 9 - others
 
 ## 基本配置
 
@@ -467,3 +467,42 @@ ssh -L local-port:remote-hostname:remote-port username@hostname
 yum install tigervnc-server #服务端
 yum install tigervnc #客户端浏览器，Windows也有相应工具
 ``````
+
+
+## 服务器
+
+### 1.Web服务器
+
+(ps:天天搞Web，这部分略)
+
+### 2.邮件服务器
+
+Fedora使用**Dovecot**实现**POP**及**IMAP**。
+
+``````sh
+yum install dovecot
+``````
+
+(ps:这部分知识比较系统，用的时候再查，略)
+
+### 3.目录服务器
+
+__OpenLDAP__
+
+### 4.文件、打印服务器
+
+__Samba__
+
+__FTP__
+
+__Printer__
+
+### 5.配置NTP
+
+__使用chrony Suite__
+
+__使用ntpd__
+
+### 6.配置PTP
+
+## 系统监控及自动化
