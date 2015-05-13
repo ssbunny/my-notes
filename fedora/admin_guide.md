@@ -551,11 +551,34 @@ Client端命令：
 
 __Samba__
 
+Samba是SMB(Server Message Block)的开源实现，该协议的现代版本是CIFS(Common
+Internat File System). 用于Windows、Linux、UNIX等系统间访问Windows文件或打印机
 
+参考：
+http://linux.vbird.org/linux_server/0370samba.php
 
 __FTP__
 
+Fedora提供两个FTP Server：
+
+* **proftpd**
+* **vsftpd**
+
+vsftpd的配置文件：
+
+* **/etc/rc.d/init.d/vsftpd** 初始化脚本
+* **/etc/pam.d/vsftpd** PAM认证配置
+* **/etc/vsftpd/vsftpd.conf** vsftpd的配置文件
+* **/etc/vsftpd/ftpusers/** 不允许登录vsftpd的用户列表
+* **/etc/vsftpd/user_list** 根据/etc/vsftpd/vsftpd.conf中的
+`userlist_deny` 配置`YES`或`NO`，来设定允许或阻止登录的用户列表
+* **/var/ftp/** 分享的文件，/var/ftp/pub/目录提供给匿名用户
+
 __Printer__
+
+(略)
+
+以下时间相关的配置是系统管理员的高级技能，暂时不学习。
 
 ### 5.配置NTP
 
@@ -566,3 +589,143 @@ __使用ntpd__
 ### 6.配置PTP
 
 ## 系统监控及自动化
+
+### 1.系统监控工具
+
+#### 查看进程
+
+__ps__
+
+``````sh
+ps ax
+ps aux
+ps ax | grep emacs
+``````
+
+__top__
+
+``````sh
+top
+``````
+
+字段含义：
+
+1. **PID** the process ID
+2. **USER** the effective username of the process owner
+3. **PR** the priority
+4. **NI** the nice value
+5. **VIRT** the amount of virtual memory the process uses
+6. **RES** the amount of non-swapped physical memory the process uses
+7. **SHR** the amount of shared memory the process uses
+8. **%CPU** the percentage of the CPU usage
+9. **%MEM** the percentage of the memory usage
+10. **TIME+** the cumulated CPU time
+11. **COMMAND** the name of the executable file
+
+交互命令：
+
+| 命令         | 描述           |
+|:-------------|:---------------|
+| Enter, Space | 立即刷新       |
+| h, ?         | 帮助文档       |
+| k            | 杀进程         |
+| n            | 显示的进程数量 |
+| u            | 按用户排序     |
+| M            | 按内存排序     |
+| P            | 按CPU排序      |
+| q            | 退出           |
+
+#### 查看内存
+
+``````sh
+free
+free -m
+``````
+
+#### 查看CPU
+
+``````sh
+lscpu
+``````
+
+#### 块设备和文件系统
+
+查看块设备：
+
+``````sh
+lsblk #树结构
+lsblk -l #列表结构
+sudo blkid
+sudo blkid /dev/vda1
+sudo blkid -po udev device_name
+``````
+
+磁盘分区：
+
+``````sh
+partx -s device_name
+``````
+
+查看挂载的文件系统：
+
+``````sh
+findmnt
+findmnt -l
+findmnt -t ext4
+``````
+
+磁盘空间使用情况：
+
+``````sh
+df
+df -h
+``````
+
+目录中的文件使用情况：
+
+``````sh
+du ~/
+du -h /etc #可读的大小
+du -sh ~/code #汇总目录大小
+``````
+
+#### 硬件信息
+
+查看PCI设备：
+
+``````sh
+lspci
+lspci -v
+lspci -vv
+``````
+
+查看USB：
+
+``````sh
+lsusb
+lsusb -v
+``````
+
+查看PCMCIA设备：
+
+``````sh
+lspcmcia
+lspcmcia -v
+``````
+
+#### 使用Net-SNMP监控性能
+
+SNMP Deamon: *net-snmp*
+
+``````sh
+systemctl start snmpd.service
+systemctl enable snmpd.service
+systemctl stop snmpd.service
+systemctl disable snmpd.service
+systemctl restart snmpd.service
+systemctl reload snmpd.service
+``````
+
+(ps: 这部分比较系统，更多内容可参考Net-SNMP官网)
+
+### 2.管理日志
