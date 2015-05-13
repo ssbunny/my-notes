@@ -489,9 +489,69 @@ yum install dovecot
 
 __OpenLDAP__
 
+术语：
+
+* `entry` 条目，LDAP目录的独立单元，用唯一DN(Distinguished Name, 分辨名)标识。
+* `attribute` 条目中的信息，例如entry表示公司，attribute则是其地址、传真等。
+* `LDIF` LDAP Data Interchange Format,LDAP的数据交换格式，是一种文本型格式。
+
+``````sh
+#LDIF 示例
+[id] dn: distinguished_name
+attribute_type: attribute_value...
+attribute_type: attribute_value...
+...
+``````
+
+OpenLDAP基础包：
+
+* openldap
+* openldap-clients
+* openldap-servers
+* openldap-servers-sql
+
+常用扩展包：
+
+* nss-pam-ldapd
+* mod-ldap
+
+Server端命令：
+
+* `slapacl` 属性列表
+* `slapadd` 通过LDIF文件添加entry
+* `slapauth` 认证
+* `slapcat` 保证entry至LDIF文件
+* `slapdn` DN列表
+* `slapindex` 重建数据索引
+* `slappasswd` 设置ldapmodify密码或slapd配置文件密码
+* `slapschema` schema
+* `slaptest` 检测LDAP服务配置
+
+Client端命令：
+
+* `ldapadd`
+* `ldapcompare`
+* `ldapdelete`
+* `ldapexop`
+* `ldapmodify`
+* `ldapmodrdn`
+* `ldappasswd`
+* `ldapserch`
+* `ldapurl`
+* `ldapwhoami`
+
+配置文件：
+
+* **/etc/openldap/ldap.conf**
+* **/etc/openldap/slapd.d/**
+
+(ps:使用时参考OpenLDAP相关文档即可)
+
 ### 4.文件、打印服务器
 
 __Samba__
+
+
 
 __FTP__
 
