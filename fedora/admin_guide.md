@@ -814,6 +814,13 @@ awk -F\' '$1=="menuentry " {print $2} /etc/grub2.cfg
 GRUB_CMDLINE_LINUX="emergency"
 ``````
 
+执行**grub2-mkconfig**命令时，GRUB2通过**/etc/grub.d/**目录查找：
+
+* `/etc/grub.d/10_linux` 查找同分区下安装的Linux内核
+* `/etc/grub.d/30_os-prober` 查找其它的操作系统
+
+`40_custom` 则用来自定义入口，它可以被编辑或复制。
+
 
 ### 2.更新内核
 
