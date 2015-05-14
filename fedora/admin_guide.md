@@ -592,7 +592,7 @@ __使用ntpd__
 
 ### 1.系统监控工具
 
-#### 查看进程
+#### 1.1查看进程
 
 __ps__
 
@@ -635,20 +635,20 @@ top
 | P            | 按CPU排序      |
 | q            | 退出           |
 
-#### 查看内存
+#### 1.2查看内存
 
 ``````sh
 free
 free -m
 ``````
 
-#### 查看CPU
+#### 1.3查看CPU
 
 ``````sh
 lscpu
 ``````
 
-#### 块设备和文件系统
+#### 1.4块设备和文件系统
 
 查看块设备：
 
@@ -689,7 +689,7 @@ du -h /etc #可读的大小
 du -sh ~/code #汇总目录大小
 ``````
 
-#### 硬件信息
+#### 1.5硬件信息
 
 查看PCI设备：
 
@@ -713,7 +713,7 @@ lspcmcia
 lspcmcia -v
 ``````
 
-#### 使用Net-SNMP监控性能
+#### 1.6使用Net-SNMP监控性能
 
 SNMP Deamon: *net-snmp*
 
@@ -729,3 +729,44 @@ systemctl reload snmpd.service
 (ps: 这部分比较系统，更多内容可参考Net-SNMP官网)
 
 ### 2.管理日志
+
+#### 2.1.查找日志文件
+
+大多数日志放在 `/var/log/` 目录，httpd或samba等应用会在其下创建独立的目录存放。
+**logrotate**工具可用来转储日志，如按天拆分、按大小、发Email等。
+
+#### 2.2.配置Rsyslog
+
+**rsyslog**的配置文件是 `/etc/rsyslog.conf` .
+
+#### 2.3.Rsyslog队列
+
+#### 2.4.Rsyslog模块
+
+#### 2.5.Rsyslog与Journal交互
+
+#### 2.6.结构化Rsyslog日志
+
+#### 2.7.调试Rsyslog
+
+#### 2.8.使用Journal
+
+#### 2.9.图形化日志管理
+
+### 3.自动化任务
+
+#### 3.1Cron & Anacron
+
+#### 3.2At & Batch
+
+### 4.OProfile
+
+
+
+## 内核、模块和驱动配置
+
+### 1.GRUB 2
+
+### 2.更新内核
+
+### 3.内核模块
