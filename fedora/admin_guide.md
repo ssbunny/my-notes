@@ -767,6 +767,54 @@ systemctl reload snmpd.service
 
 ### 1.GRUB 2
 
+**配置文件**位置：
+
+* BIOS：**/boot/grub2/grub.cfg**
+* UEFI: **/boot/efi/EFI/redhat/grub.cfg**
+
+配置文件不直接修改，而是通过 `/usr/sbin/grub2-mkconfig` 命令修改。
+命令依据**/boot/**中的Linux内核生成配置文件。
+
+模板文件在： **/etc/grub.d/** 中，自定义设置在 **/etc/default/grub** 文件中。
+每次更新/etc/default/grub文件时要重新生成 `grub.cfg` 文件。如：
+
+``````sh
+grub2-mkconfig -o /boot/grub2/grub.cfg
+``````
+
+配置文件中每个 `menuentry` 代表一个GRUB2引导菜单入口，后面跟着一个title，
+一组选项和一个花括号；花括号内的内容要缩进，其中 `linux16` 指向Linux内核
+(在UEFI系统中是 `linuxefi` )。`initrd16` 指向RAM镜像。如果**/boot**是独立分区，
+则是基于/boot的相对路径。
+
+**定义GRUB2菜单**
+
+修改 `/etc/default/grub` 中的 `GRUB_DEFAULT` 设置默认入口：
+
+1. 设置为 `saved`
+2. 设置为具体入口名
+
+值为saved时，会根据**/boot/grub2/grubenv**中的**saved_entry**确定入口，
+此时可以用 `grub2-set-default` 命令来进行设置，此命令也可以接数字：
+
+``````sh
+grub2-set-default 2
+``````
+
+值为具体名时，可以根据以下命令找到可用的入口：
+
+``````sh
+awk -F\' '$1=="menuentry " {print $2} /etc/grub2.cfg
+``````
+
+一次性的**编辑GRUB**可以在引导菜单出现时选中对应菜单，按 `e` 键。
+永久改变需要改/etc/default/grub文件，如采用*emergency mode*启动：
+
+``````sh
+GRUB_CMDLINE_LINUX="emergency"
+``````
+
+
 ### 2.更新内核
 
 ### 3.内核模块
