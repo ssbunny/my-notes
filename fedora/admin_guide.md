@@ -823,7 +823,7 @@ GRUB_CMDLINE_LINUX="emergency"
 
 **自定义菜单:**
 
-> $$ 优先备份好 /etc/grub.d/ 目录，以做还原。
+*$$ 优先备份好 /etc/grub.d/ 目录，以做还原*
 
 1. 拷贝 /boot/grub2/grub.cfg (或 /boot/efi/EFI/redhat/grub.cfg )的内容至
 /etc/grub.d/40_custom 文件底部；
@@ -832,6 +832,59 @@ GRUB_CMDLINE_LINUX="emergency"
 40_custom, 01_users(如果存在), README 即可；
 4. 按需要修改、添加、删除 40_custom 中的入口菜单；
 5. 执行 grub2-mkconfig -o /boot/grub2/grub.cfg
+
+**密码保护**
+
+尽量不要修改 /etc/grub.d/00_header 文件，而是在 /etc/grub.d/01_users 中处理。
+
+1.指定**superusers**及密码：
+
+``````sh
+cat <<EOF
+set superusers="john"
+password john johnpassword
+``````
+
+2.指定其他可访问菜单的用户：
+
+``````sh
+cat <<EOF
+set superusers="john"
+password john johnpassword
+password jane janepassword
+EOF
+``````
+
+3.在菜单配置中指定用户：
+
+``````sh
+menuentry 'Red Hat Enterprise Linux Server' --unrestricted {
+  set root=(hd0,msdos1)
+  linux /vmlinuz
+}
+menuentry 'Fedora' --users jane {
+  set root=(hd0,msdos2)
+  linux /vmlinuz
+}
+menuentry 'Red Hat Enterprise Linux Workstation' {
+  set root=(hd0,msdos3)
+  linux /vmlinuz
+}
+``````
+
+上面的配置中，john可以访问修改任一系统，jane可以操作Fedora系统，
+其它用户只能访问RHEL Server系统，不能修改它。指定了superser后，
+默认会保护所有的系统，除非指定 `--unrestricted` 选项。
+
+> 保护明文密码：
+
+> 通过 `grub2-mkpasswd-pbkdf2` 命令根据提示生成加密密码，在配置文件中：
+
+>     cat<<EOF
+>     set superusers="john"
+>     password_pbkdf2 john
+>      grub.pbkdf2.sha512.10000..........
+>     EOF
 
 
 
