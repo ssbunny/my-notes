@@ -770,7 +770,7 @@ systemctl reload snmpd.service
 **配置文件**位置：
 
 * BIOS：**/boot/grub2/grub.cfg**
-* UEFI: **/boot/efi/EFI/redhat/grub.cfg**
+* UEFI：**/boot/efi/EFI/redhat/grub.cfg**
 
 配置文件不直接修改，而是通过 `/usr/sbin/grub2-mkconfig` 命令修改。
 命令依据**/boot/**中的Linux内核生成配置文件。
@@ -804,7 +804,7 @@ grub2-set-default 2
 值为具体名时，可以根据以下命令找到可用的入口：
 
 ``````sh
-awk -F\' '$1=="menuentry " {print $2} /etc/grub2.cfg
+awk -F\' '$1=="menuentry " {print $2}' /etc/grub2.cfg
 ``````
 
 一次性的**编辑GRUB**可以在引导菜单出现时选中对应菜单，按 `e` 键。
@@ -820,6 +820,19 @@ GRUB_CMDLINE_LINUX="emergency"
 * `/etc/grub.d/30_os-prober` 查找其它的操作系统
 
 `40_custom` 则用来自定义入口，它可以被编辑或复制。
+
+**自定义菜单:**
+
+> $$ 优先备份好 /etc/grub.d/ 目录，以做还原。
+
+1. 拷贝 /boot/grub2/grub.cfg (或 /boot/efi/EFI/redhat/grub.cfg )的内容至
+/etc/grub.d/40_custom 文件底部；
+2. 删除 menuentry 部分之外的其它脚本代码；
+3. 删除(或取消执行权) /etc/grub.d/ 目录下的脚本，只保留 00_header,
+40_custom, 01_users(如果存在), README 即可；
+4. 按需要修改、添加、删除 40_custom 中的入口菜单；
+5. 执行 grub2-mkconfig -o /boot/grub2/grub.cfg
+
 
 
 ### 2.更新内核
