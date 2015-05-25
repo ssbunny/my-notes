@@ -876,7 +876,7 @@ menuentry 'Red Hat Enterprise Linux Workstation' {
 其它用户只能访问RHEL Server系统，不能修改它。指定了superser后，
 默认会保护所有的系统，除非指定 `--unrestricted` 选项。
 
-> 保护明文密码：
+> **保护明文密码：**
 
 > 通过 `grub2-mkpasswd-pbkdf2` 命令根据提示生成加密密码，在配置文件中：
 
@@ -885,6 +885,28 @@ menuentry 'Red Hat Enterprise Linux Workstation' {
 >     password_pbkdf2 john
 >      grub.pbkdf2.sha512.10000..........
 >     EOF
+
+#### 重新安装 GRUB 2
+
+重新安装的作用：
+
+* 方便修复文件丢失、配置错误等；
+* 升级GRUB版本；
+* 控制新安装的操作系统；
+* 给其它驱动增加引导信息等。
+
+``````sh
+grub2-install /dev/sda
+``````
+
+**grub2-install**命令只会还原配置错误的文件，如果 /boot/grub2/ 目录不存在了，
+会重新创建它。
+
+1. 执行 `rm /etc/grub.d/*`
+2. 执行 `rm /etc/sysconfig/grub`
+3. (EFI系统时，)执行 `yum reinstall grub2-efi shim`
+4. 更新配置文件： `grub2-mkconfig -o /boot/grub2/grub.cfg`
+5. 在指定分区还原： `grub2-install /dev/sda`
 
 
 
