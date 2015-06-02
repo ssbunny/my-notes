@@ -44,7 +44,7 @@ sudo timedatectl set-time "2012-11-22 11:22:33"
 timedatectl list-timezones
 sudo timedatectl set-timezone Europe/Prague
 sudo timedatectl set-ntp yes # 开启时间同步服务
-``````
+```````
 
 传统的date命令：
 
@@ -84,8 +84,8 @@ __umask__ 在配置文件 `/etc/bashrc` 中，通常umask设定为 `022` .
 | pwconv, pwunconv            | password与shadow password之间的转换 |
 | grpconv, grpunconv          | group shadow                        |
 
-``````bash
 
+``````bash
 sudo useradd zhangsan # 默认增加的用户是locked
 passwd zhangsan # 指定密码并unlock用户
 ``````
