@@ -1,6 +1,6 @@
 # An Introduction to Disk Partitions 硬盘分区介绍
 
-*ps: 来自 Fedora 官方文档 `Installation Guide` 附录Ｂ*
+*ps: 来自 Fedora 21 官方文档 `Installation Guide` 附录Ｂ*
 
 **个人翻译供学习用，版权归Fedora所有。因中国大陆的网络问题，暂无法提交到 `Fedora  Documentation` 项目。 -- ssbunny**
 
@@ -26,7 +26,7 @@ Hard disks perform a very simple function - they store data and reliably retriev
 
 硬盘的功能非常简单——它们被用来存储数据并可以通过命令可靠地检索到这些数据。
 
-When discussing issues such as disk partitioning, 
+When discussing issues such as disk partitioning,
 it is important to have a understanding of the　underlying hardware;
 however, since the　theory is very complicated and expansive,
 only the basic　concepts will be explained here.
@@ -63,7 +63,7 @@ As Figure 2, “Disk Drive with a File System”, implies, the order imposed by 
 
 * A small percentage of the driver's available space is used to store file system-related data and can be considered as overhead.
 * 磁盘驱动器的可用空间中，有一小部分被用来存放系统相关的数据文件。
-* A file system splits the remaining space into small, consistently-sized segments. For Linux, these segments are known as blocks.	
+* A file system splits the remaining space into small, consistently-sized segments. For Linux, these segments are known as blocks.
 * 文件系统会将剩余空间切分成大小一致的小片段。在Linux中，这些片段被称为 `块` 。
 
 Note that there is no single, universal file system. As Figure 3, “Disk Drive with a Different File System”, shows, a disk drive may have one of many different file systems written on it. Different
@@ -146,11 +146,3 @@ Each partition table entry contains several important characteristics of the par
 • The points on the disk where the partition starts and ends
 • Whether the partition is "active"
 • The partition's type
-
-
-
-
-
-
-
-

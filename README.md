@@ -4,13 +4,15 @@
 
 * [HTTP](web/HTTP学习笔记.md)
 
+## Program Language
+
+* [Rust](lang/rust.md)
+
 ## OS
 
-**Fedora**
+* [Fedora 21 系统管理员指南](fedora/admin_guide.md)
+* [磁盘分区 - Fedora文档](fedora/disk_partitions.md)
 
-* [系统管理员指南](fedora/admin_guide.md)
-* [磁盘分区](fedora/disk_partitions.md)
-
-**FAQ**
+## Other
 
 * [杂烩问题记录](other/os_faq.md)

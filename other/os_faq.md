@@ -2,6 +2,8 @@
 
 ### 1. OpenJDK 和 SunJDK 共存问题
 
+(Tue 2 Jun, 2015)
+
 以前为了使用不同的jdk，通常通过配置 `.bash_profile` 将 `$PATH` 里需要用的 jdk
 路径放到前面。其实可以通过 **alternatives** 命令配置不同的java命令。
 它是一个典型的策略模式的实现。

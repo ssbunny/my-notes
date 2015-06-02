@@ -1,4 +1,4 @@
-# Fedora 21 系统管理员指南 - 笔记
+# Fedora 21 系统管理员指南 (2015-05)
 
 *System Administrator's Guide*
 *- Deployment, Configuration, and Administration of Fedora 21*
