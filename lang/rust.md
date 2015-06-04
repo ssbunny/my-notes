@@ -402,9 +402,26 @@ let y = if x == 5 { 10 } else { 15 };  // y 为 10
 
 ### 5.6.for
 
+Rust的 `for` 语法如下，其中expression为 `iterator`：
+
+```
+for var in expression {
+    code
+}
+```
+
+例如：
+
+```rust
+for x in 0..10 {
+    println!("{}", x);
+}
+```
 
 
 ### 5.7.while
+
+
 
 ### 5.8.所有权 (Ownership)
 
