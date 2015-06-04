@@ -421,6 +421,53 @@ for x in 0..10 {
 
 ### 5.7.while
 
+```rust
+let mut x = 5;
+let mut done: bool = false;
+
+while !done {
+    x += x -3;
+    println!("{}", x);
+
+    if x % 5 == 0 {
+        done = true;
+    }
+}
+```
+
+`while` 用于不确定循环次数的情况。无限循环可以使用：
+
+```rust
+while true {
+}
+```
+
+然而此情况Rust有专用关键字 `loop` :
+
+```rust
+loop {
+}
+```
+
+Rust在流程分析时会区别对待两种写法，loop循环可以提供更多信息因此可以更安全的处理。
+无限循环时，应用总是使用 `loop` 形式。
+
+结束循环的 `break` 和 `continue` (for中也可以用)：
+
+```rust
+let mut x = 5;
+
+loop {
+    x += x -3;
+    if x % 5 == 0 { break; }
+}
+```
+
+```rust
+for x in 0..10 {
+    if x % 2 == 0 { continue; }
+}
+```
 
 
 ### 5.8.所有权 (Ownership)
@@ -429,7 +476,9 @@ for x in 0..10 {
 
 ### 5.10.使用期 (Lifetimes)
 
+### 5.11.可变性 (Mutability)
 
+### 5.12.结构体 (Structs)
 
 
 
