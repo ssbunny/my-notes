@@ -175,16 +175,188 @@ fn foo(x: i32) -> i32 {
 }
 ```
 
+#### Diverging functions
 
+一种特殊语法 `diverging functions` :
 
+```rust
+fn diverges() -> ! {
+    panic!("This function never returns!");
+}
+```
 
+> 宏 `panic!` 会导致当前执行线程crash掉。
+> 由于函数永远没有返回值，故类型为 `!` (读作 diverges)
 
+该函数可以被用作任意类型：
 
-
+```rust
+let x: i32 = diverges();
+let x: String = diverges();
+```
 
 ### 5.3.原生类型 (Primitive Types)
 
+Rust提供了一些语言内建的原生类型，另一些标准库中提供的实用类型则是构建在原生类型之上。
+
+#### 布尔 (Booleans)
+
+`bool` 类型有两个值： `true` 和 `false`
+
+```rust
+let x = true;
+let y: bool = false;
+```
+
+#### 字符 (char)
+
+`char` 类型通过单引号 `'` 创建：
+
+```rust
+let x = 'x';
+let two_hearts = '💕';
+```
+
+Rust的char类型并非一个字节，而是四个字节。
+
+#### 数字类型
+
+* i8
+* i16
+* i32
+* i64
+* u8
+* u16
+* u32
+* u64
+* isize
+* usize
+* f32
+* f64
+
+默认类型：
+
+```rust
+let x = 42;  // i32
+let y = 1.0; // f64
+```
+
+分类：
+
+* 有符号 / 无符号： i32, u8
+* 固定大小 / 可变大小： u32, isize
+* 浮点: f32, f64
+
+> 可变大小的数字类型，其大小基于底层机器的指针大小。
+
+#### 数组 (Arrays)
+
+数组默认是不可变的：
+
+```rust
+let a = [1, 2, 3];
+let mut m = [1, 2, 3];
+```
+
+数组类型为 `[T; N]` , 其中 `N` 为编译期常量, 代表数组的长度。
+
+将数组全部初始化为 0 的简化写法：
+
+```rust
+let a = [0; 20];
+```
+
+可通过 `len()` 获取数组长度：
+
+```rust
+let a = [1, 2, 3];
+println!("a has {} elements.", a.len());
+```
+
+可通过下标符号获取特定的数组元素(下标从 **0** 开始)：
+
+```rust
+let names = ["Graydon", "Brian", "Niko"]; // names: [&str; 3]
+println!("The second name is: {}", names[1]);
+```
+
+#### 切片 (Slices)
+
+切片是对数组的引用，通常不会直接创建。可变或不变类型均可:
+
+```rust
+let a = [0, 1, 2, 3, 4];
+let middle = &a[1..4];   // 1, 2, 3
+let complete = &a[..];
+```
+
+切片类型为 `&[T]` .
+
+#### str
+
+`str` 是Rust最原生的字符串类型。自身并没什么作用，通常作为引用使用： `&str`.
+
+#### 元组 (Tuples)
+
+元组是指固定大小的有序列表：
+
+```rust
+let x = (1, "hello");
+```
+
+加上类型后是这样：
+
+```rust
+let x: (i32, &str) = (1, "hello");
+```
+
+类型及参数数量相同时，元组可以赋值：
+
+```rust
+let mut x = (1, 2);
+let y = (2, 3);
+
+x = y;
+```
+
+destructuring let:
+
+```rust
+let (x, y, z) = (1, 2, 3);
+println!("x is {}", x);
+```
+
+区分：
+
+```rust
+(0,);   // 单元素元组
+(0);    // 括号中的 0
+```
+
+元组索引：
+
+```rust
+let tuple = (1, 2, 3);
+let x = tuple.0;
+let y = tuple.1;
+let z = tuple.2;
+println!("x is {}"，x);
+```
+
+#### 函数
+
+函数也是一种类型：
+
+```rust
+fn foo(x: i32) -> i32 { x }
+let x: fn(i32) -> i32 = foo;
+```
+
+例子中，x 是一个函数指针，占用i32返回i32.
+
+
 ### 5.4.注释 (Comments)
+
 
 ### 5.5.if
 
