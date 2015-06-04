@@ -221,18 +221,10 @@ Rust的char类型并非一个字节，而是四个字节。
 
 #### 数字类型
 
-* i8
-* i16
-* i32
-* i64
-* u8
-* u16
-* u32
-* u64
-* isize
-* usize
-* f32
-* f64
+* i8 / i16 / i32 / i64
+* u8 / u16 / u32 / u64
+* isize / usize
+* f32 / f64
 
 默认类型：
 
@@ -356,6 +348,30 @@ let x: fn(i32) -> i32 = foo;
 
 
 ### 5.4.注释 (Comments)
+
+Rust的注释分为两种： **行注释**和**文档注释**
+
+```rust
+// this is a line comment.
+let x = 5;
+```
+
+文档注释支持Markdown语法，可以通过 `rustdoc` 工具生成HTML并测试示例代码：
+
+```rust
+/// Adds one to the number given.
+///
+/// # Examples
+///
+/// ```
+/// let five = 5;
+///
+/// assert_eq!(6, add_one(5));
+/// ```
+fn add_one(x: i32) -> i32 {
+    x + 1
+}
+```
 
 
 ### 5.5.if
