@@ -376,7 +376,33 @@ fn add_one(x: i32) -> i32 {
 
 ### 5.5.if
 
+`if` 的语法更像动态语言，而非系统语言。传统用法：
+
+```rust
+let x = 5;
+
+if x == 5 {
+    println!("x is five!");
+} else if x == 6 {
+    println!("x is six!");
+} else {
+    println!("x is not five or six :(");
+}
+```
+
+稍复杂些的用法：
+
+```rust
+let x = 5;
+let y = if x == 5 { 10 } else { 15 };  // y 为 10
+```
+
+`if` 是一个表达式而非语句，表达式的值是某分支的最后一个表达式的值。
+
+
 ### 5.6.for
+
+
 
 ### 5.7.while
 
