@@ -28,7 +28,11 @@ $ curl -sf -L https://static.rust-lang.org/rustup.sh | sh
 $ sudo /usr/local/lib/rustlib/uninstall.sh
 ```
 
-> 安装时遇到**Rustc: error while loading shared libraries:librustc_driver--4e7c5e5c.so** 是因为非Debian系统默认不信任 /lib 和 /usr/lib , rust安装到 /usr/local, **ldconfig**无法识别新安装的库，只需要执行 `sudo ldconfig /usr/local/lib` 即可。 详见 [https://github.com/rust-lang/rust/issues/24677](https://github.com/rust-lang/rust/issues/24677)
+> 安装时遇到**Rustc: error while loading shared libraries:librustc_driver--4e7c5e5c.so** 
+> 是因为非Debian系统默认不信任 /lib 和 /usr/lib , 
+> rust安装到 /usr/local, **ldconfig**无法识别新安装的库，
+> 只需要执行 `sudo ldconfig /usr/local/lib` 即可。 
+> 详见 [rust-issues 24677](https://github.com/rust-lang/rust/issues/24677)
 
 ### 2.2.Hello, world
 Rust不限制代码存放路径。
@@ -472,7 +476,80 @@ for x in 0..10 {
 
 ### 5.8.所有权 (Ownership)
 
+变量绑定时具有 `所有权` 属性，超出作用域时，其资源会释放。
+
+任一给定资源在Rust中，只有**明确的一个**绑定，以下代码会报错：
+
+```rust
+// error !!!!
+let v = vec![1, 2, 3];
+let v2 = v;
+println!("v[0] is {}", v[0]);
+```
+
+调用具有所有权的函数时也有可能产生同样的错误：
+
+```rust
+// error !!!!
+fn take(v: Vec<i32>) {
+    // ...
+}
+
+let v = vec![1, 2, 3];
+take(v);
+
+println!("v[0] is {}", v[0]);
+```
+
+被移动的绑定不能使用**细节说明**：
+
+```rust
+let v = vec![1, 2, 3];
+let v2 = v;
+```
+
+第一行代码的内存分配：向量对象存放在栈中，并包含一个指向实际内容([1, 2, 3])的指针，
+内容存放在堆中。当将 `v` 移到 `v2` 时，会为 `v2` 创建其指针的复本，也就是说，
+会有两个指向堆中的指针。由于引入的数据竞争违反了Rust的安全保证机制，因此，
+Rust之后将会禁止使用 `v` 。另外，优化器有可能会根据情况移除栈内的实际拷贝。
+
+**Copy类型**有不同的表现(和 `traits` 机制有关)：
+
+```rust
+let v = 1;
+let v2 = v;
+println!("v is {}", v);
+```
+
+此时，`v` 是i32类型的，它实现了 `Copy` 。赋值时不产生指针复制，而是直接复制数据值。
+因此之后 `v` 仍然可以使用。
+
+返还所有权：
+
+```rust
+fn foo(v: Vec<i32>) -> Vec<i32> {
+    // ...
+    v
+}
+```
+
+一个更有趣的例子(有些难懂，可以通过 `borrowing` 机制解决)：
+
+```rust
+fn foo(v1: Vec<i32>, v2: Vec<i32>) -> (Vec<i32>, Vec<i32>, i32) {
+    (v1, v2, 42)
+}
+
+let v1 = vec![1, 2, 3];
+let v2 = vec![1, 2, 3];
+
+let (v1, v2, answer) = foo(v1, v2);
+```
+
+
 ### 5.9.引用和借用 (References and Borrowing)
+
+
 
 ### 5.10.使用期 (Lifetimes)
 
