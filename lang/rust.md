@@ -1,9 +1,12 @@
 # Rust 编程语言 (2015-06)
 
-*该笔记基于 Rust 1.0.0 版本。*
+*该笔记基于 Rust 1.0.0 版本，参考 <Rust Book>*
 
 ## 1.介绍
-Rust特有的核心概念：**ownership**
+
+
+Rust是系统编程语言，超快，安全，零成本抽象。
+特有的核心概念：**ownership**
 
 ```rust
 fn main() {
@@ -932,11 +935,47 @@ println!("length is {} inches", integer_length);
 struct Electron;
 ```
 
+### 5.13.枚举 (Enums)
+
+枚举代表具有多个可能值的数据类型：
+
+```rust
+enum Message {
+    Quit,
+    ChangeColor(i32, i32, i32),
+    Move { x: i32, y: i32 },
+    Write(String),
+}
+```
+
+枚举也叫作 `sum type` , 使用 `::` 语法访问：
+
+```rust
+let x: Message = Message::Move { x: 3, y: 4 };
+```
+
+
+### 5.14.match
 
 
 
+### 5.15.模式 (Patterns)
 
+### 5.16.方法 (Method Syntax)
 
+### 5.17.vector
+
+### 5.18.字符串 (Strings)
+
+### 5.19.泛型 (Generics)
+
+### 5.20.特性 (Traits)
+
+### 5.21.Drop特性
+
+### 5.22.if let
+
+### 5.23.
 
 
 
