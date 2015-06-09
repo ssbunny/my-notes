@@ -861,6 +861,83 @@ println!("y: {:?}", point.y); // y: Cell { value: 7 }
 
 ### 5.12.结构体 (Structs)
 
+结构体用来创建更加复杂的数据类型。
+
+```rust
+struct Point {
+    x: i32,
+    y: i32,
+}
+```
+
+结构体使用关键字 `struct` , 名字用**大写字母**开头，使用驼峰法命名(PointInSpace)。
+使用 `let` 创建结构体实例，使用 `key: value` 形式为每个域赋值(顺序无关)。 
+使用 `.` 访问域值： `origin.x` .
+
+短期可变性示例：
+
+```rust
+struct Point {
+    x: i32,
+    y: i32,
+}
+
+fn main() {
+    let mut point = Point { x: 0, y: 0 };
+    point.x = 5;
+
+    let point = point; // this new binding can’t change now
+    point.y = 6; // this causes an error
+}
+```
+
+`struct` 可以使用 `..` 语法为其余未指定域赋值:
+
+```rust
+struct Point3D {
+    x: i32,
+    y: i32,
+    z: i32,
+}
+
+let origin = Point3d { x: 0, y: 0, z: 0 };
+let point = Point3d { z: 1, x: 2, .. origin };
+```
+
+元组结构体：
+
+```rust
+struct Color(i32, i32, i32);
+struct Point(i32, i32, i32);
+
+let black = Color(0, 0, 0);
+let origin = Point(0, 0, 0);
+```
+
+多数情况下，单纯的结构体是优于元组结构体的。
+只有一个元素的元组结构体非常实用，叫做 `newtype` 模式。
+
+```rust
+struct Inches(i32);
+
+let length = Inches(10);
+
+let Inches(integer_length) = length;
+println!("length is {} inches", integer_length);
+```
+
+`unit-like` 结构体：
+
+```rust
+struct Electron;
+```
+
+
+
+
+
+
+
 
 
 
