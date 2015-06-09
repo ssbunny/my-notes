@@ -576,7 +576,7 @@ let v = vec![];
 foo(&v);
 ```
 
-还有一种**可变**引用: `&mut T` ：
+还有一种**可变引用**: `&mut T` ：
 
 ```rust
 let mut x = 5;
@@ -593,8 +593,8 @@ println!("{}", x);  // 6
 
 * 首先，任何借用都要比所有者维持更小的作用域。
 * 其次，只能同时拥有以下两种中的一种借用：
-  * 0到N个对资源的引用(&T)
-  * 明确只有1个可变引用(&mut T)
+  + 0到N个对资源的引用(&T)
+  + 明确只有1个可变引用(&mut T)
 
 > 当有两个或更多指针同时指向同一块内存区域时，
 > 如果其中至少有一个指针正在进行写数据，操作就不会同步。
@@ -642,12 +642,156 @@ println!("{}", y);
 ```
 
 
-
-
-
-
-
 ### 5.10.使用期 (Lifetimes)
+
+使用期用来防止“释放后又使用某资源”。分为隐式和显示：
+
+```rust
+// 隐式 (implicit)
+fn foo(x: &i32) {
+}
+
+// 显示 (explicit)
+fn bar<'a>(x: &'a i32) {
+}
+```
+
+声明使用期：
+
+```rust
+fn bar<'a, 'b>(...)
+```
+
+使用使用期：
+
+```rust:
+...(x: &'a mut i32)
+```
+
+`struct` 中的使用期：
+
+```rust
+struct Foo<'a> {
+    x: &'a i32,
+}
+
+fn main() {
+    let y = &5;
+    let f = Foo {x: y};
+}
+println!("{}", f.x);
+```
+
+__作用域问题__
+
+```rust
+struct Foo<'a> {
+    x: &'a i32,
+}
+
+fn main() {
+    let y = &5;           // -+ y goes into scope
+    let f = Foo { x: y }; // -+ f goes into scope
+    // stuff              //  |
+                          //  |
+}                         // -+ f and y go out of scope
+```
+
+下面的代码会报错：
+
+```rust
+struct Foo<'a> {
+    x: &'a i32,
+}
+
+fn main() {
+    let x;                    // -+ x goes into scope
+                              //  |
+    {                         //  |
+        let y = &5;           // ---+ y goes into scope
+        let f = Foo { x: y }; // ---+ f goes into scope
+        x = &f.x;             //  | | error here
+    }                         // ---+ f and y go out of scope
+                              //  |
+    println!("{}", x);        //  |
+}                             // -+ x goes out of scope
+```
+
+其中，`f` 和 `y` 的作用域小于 `x` 的作用域，但是当执行 `x = &f.x` 时，
+将 `x` 引用到了一个即将结束作用域的变量。
+
+一种特殊的使用期 `'static`, 它拥有整个程序的使用期:
+
+```rust
+let x: &'static str = "Hello world";
+```
+
+```rust
+static FOO: i32 = 5;
+let x: &'static i32 = &FOO;
+```
+
+__lifetime elision :__
+
+* `input lifetime` 和函数参数关联的使用期；
+* `output lifetime` 和函数返回值关联的使用期。
+
+```rust
+fn foo<'a>(bar: &'a str) // input lifetime
+fn foo<'a>() -> &'a str // output lifetime
+fn foo<'a>(bar: &'a str) -> &'a str  // both
+```
+
+规则：
+
+1. 任何函数参数中省略的使用期，都是一个独立的使用期参数；
+2. 如果只有一个 `输入使用期` (省略或不省略均可)，该使用期会被赋给函数返回值；
+3. 如果有多个 `输入使用期` ，其中一个为 `&self` 或 `&mut self` 则 `self`
+的使用期会被赋给省略的 `输出使用期` 。
+
+除此之外，省略 `输出使用期` 将是错误的。
+
+只有关联到引用 (`&`) 时才需要 `使用期` 。
+
+```rust
+fn print(s: &str);
+fn print<'a>(s: &'a str);
+
+fn debug(lvl: u32, s: &str);
+fn debug<'a>(lvl: u32, s: &'a str);
+
+fn substr(s: &str, until: u32) -> &str;
+fn substr<'a>(s: &'a str, until: u32) -> &'a str;
+
+fn get_mut(&mut self) -> &mut T;
+fn get_mut<'a>(&'a mut self) -> &'a mut T;
+
+fn args<T:ToCStr>(&mut self, args: &[T]) -> &mut Command
+fn args<'a, 'b, T:ToCStr>(&'a mut self, args: &'b [T]) -> &'a mut Command
+
+fn new(buf: &mut [u8]) -> BufWriter
+fn new<'a>(buf: &'a mut [u8]) -> BufWriter<'a>
+```
+
+```rust
+// ILLEGAL, no inputs
+fn get_str() -> &str;
+
+// ILLEGAL, two inputs
+fn frob(s: &str, t: &str) -> &str;
+// Output lifetime is unclear
+fn frob<'a, 'b>(s: &'a str, t: &'b str) -> &str;
+```
+
+
+
+
+
+
+
+
+
+
 
 ### 5.11.可变性 (Mutability)
 
