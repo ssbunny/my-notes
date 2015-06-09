@@ -1018,6 +1018,114 @@ fn process_message(msg: Message) {
 
 ### 5.15.模式 (Patterns)
 
+__1) 基本用法__
+
+```rust
+let x = 1;
+
+match x {
+    1 => println!("one"),
+    2 => println!("two"),
+    3 => println!("three"),
+    _ => println!("anything"),
+}
+// one
+```
+
+__2) 多模式匹配 `|`__
+
+```rust
+let x = 1;
+
+match x {
+    1 | 2 => println!("one or two"),
+    3 => println!("three"),
+    _ => println!("anything"),
+}
+// one or two
+```
+
+__3) 范围匹配 `...`__
+
+```rust
+let x = 1;
+
+match x {
+    1 ... 5 => println!("one through five"),
+    _ => println!("anything"),
+}
+// one through five
+```
+
+```rust
+// 范围多用于整数和 char
+let x = '💅';
+
+match x {
+    'a' ... 'j' => println!("early letter"),
+    'k' ... 'z' => println!("late letter"),
+    _ => println!("something else"),
+}
+// something else
+```
+
+__4) 绑定 `@`__
+
+```rust
+let x = 1;
+
+match x {
+    e @ 1 ... 5 => println!("got a range element {}", e),
+    _ => println!("anything"),
+}
+// got a range element 1
+```
+
+复杂的情况：
+
+```rust
+#[derive(Debug)]
+struct Person {
+    name: Option<String>,
+}
+
+let name = "Steve".to_string();
+let mut x: Option<Person> = Some(Person { name: Some(name) });
+match x {
+    Some(Person { name: ref a @ Some(_), .. }) => println!("{:?}", a),
+    _ => {}
+}
+// Some("Steve")
+```
+
+和 `|` 一起使用时，每部分都要绑定：
+
+```rust
+let x = 5;
+
+match x {
+    e @ 1 ... 5 | e @ 8 ... 10 => println!("got a range element {}", e),
+    _ => println!("anything"),
+}
+```
+
+__5) 忽略枚举元素的值类型 `..`__
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ### 5.16.方法 (Method Syntax)
 
 ### 5.17.vector
