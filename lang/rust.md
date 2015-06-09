@@ -957,6 +957,63 @@ let x: Message = Message::Move { x: 3, y: 4 };
 
 ### 5.14.match
 
+`match` 语法可以替换复杂的 `if/else` 语句:
+
+```rust
+let x = 5;
+
+match x {
+    1 => println!("one"),
+    2 => println!("two"),
+    3 => println!("three"),
+    4 => println!("four"),
+    5 => println!("five"),
+    _ => println!("something else"),
+}
+```
+
+`match` 中使用的是模式匹配(参考Patterns)。
+
+`match` 语法的好处：
+
+1. 全面性检查。缺少某些分支时无法编译，如上例子中必须有 `_` 分支；
+2. match 是一个表达式，可以直接进行 let 绑定。
+
+```rust
+let x = 5;
+let number = match x {
+    1 => "one",
+    2 => "two",
+    3 => "three",
+    4 => "four",
+    5 => "five",
+    _ => "something else",
+};
+```
+
+`match` 可以用于枚举，而 `if` 不可以(可以使用 `if let` ):
+
+```rust
+enum Message {
+    Quit,
+    ChangeColor(i32, i32, i32),
+    Move { x: i32, y: i32 },
+    Write(String),
+}
+
+fn quit() { /* ... */ }
+fn change_color(r: i32, g: i32, b: i32) { /* ... */ }
+fn move_cursor(x: i32, y: i32) { /* ... */ }
+
+fn process_message(msg: Message) {
+    match msg {
+        Message::Quit => quit(),
+        Message::ChangeColor(r, g, b) => change_color(r, g, b),
+        Message::Move { x: x, y: y } => move_cursor(x, y),
+        Message::Write(s) => println!("{}", s),
+    };
+}
+```
 
 
 ### 5.15.模式 (Patterns)
