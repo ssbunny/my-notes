@@ -1,5 +1,7 @@
 # Rust 编程语言 (2015-06)
 
+*该笔记基于 Rust 1.0.0 版本。*
+
 ## 1.介绍
 Rust特有的核心概念：**ownership**
 
@@ -784,18 +786,81 @@ fn frob<'a, 'b>(s: &'a str, t: &'b str) -> &str;
 ```
 
 
-
-
-
-
-
-
-
-
-
 ### 5.11.可变性 (Mutability)
 
+可变性不是默认状态：
+
+```rust
+let x = 5;
+x = 6; // error !!!!
+```
+
+需要加入 `mut` 关键字：
+
+```rust
+let mut x = 5;
+x = 6;
+```
+
+可变变量绑定表示可以改变绑定的指向，因而改变的并非变量对应的值，而是绑定。
+
+如果想改变绑定对应的值，可以使用 `可变引用` ：
+
+```rust
+let mut x = 5;
+let y = &mut x;
+```
+
+`y` 是绑定到可变引用的一个不可变绑定。也就是说，
+`y` 不可以再被绑定到其它东西上( `y = &mut z` )，
+但是却可以改变绑定到 `y` 上的值( `*y = 5` )。
+
+当然 `y` 本身也可以是可变的：
+
+```rust
+let mut x = 5;
+let mut y = &mut x;
+```
+
+`mut` 是 `模式` 的一部分：
+
+```rust
+let (mut x, y) = (5, 6);
+fn foo(mut x: i32) {
+}
+```
+
+可变性是借用( `&mut` )或绑定( `let mut` )的属性，因此 `struct` 中的域不能设置。
+
+```rust
+struct Point {
+    x: i32,
+    y: i32,
+}
+
+let mut a = Point { x: 5, y: 6 };
+a.x = 6;
+```
+
+通过使用 `Cell<T>` , 可以改变域一级的可变性：
+
+```rust
+use std::cell::Cell;
+
+struct Point {
+    x: i32,
+    y: Cell<i32>,
+}
+
+let point = Point { x: 5, y: Cell::new(6) };
+point.y.set(7);
+
+println!("y: {:?}", point.y); // y: Cell { value: 7 }
+```
+
+
 ### 5.12.结构体 (Structs)
+
 
 
 
