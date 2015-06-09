@@ -1111,24 +1111,245 @@ match x {
 
 __5) 忽略枚举元素的值类型 `..`__
 
+```rust
+enum OptionalInt {
+    Value(i32),
+    Missing,
+}
 
+let x = OptionalInt::Value(5);
 
+match x {
+    OptionalInt::Value(..) => println!("Got an int!"),
+    OptionalInt::Missing => println!("No such luck."),
+}
+// Got an int!
+```
 
+__6) 使用 `if` 增加match guards__
 
+```rust
+enum OptionalInt {
+    Value(i32),
+    Missing,
+}
 
+let x = OptionalInt::Value(5);
 
+match x {
+    OptionalInt::Value(i) if i > 5 => println!("Got an int bigger than five!"),
+    OptionalInt::Value(..) => println!("Got an int!"),
+    OptionalInt::Missing => println!("No such luck."),
+}
+// Got an int!
+```
 
+__7) `ref` 和 `ref mut`__
 
+```rust
+let x = 5;
 
+match x {
+    ref r => println!("Got a reference to {}", r),
+}
+// Got a reference to 5
+```
 
+```rust
+let mut x = 5;
 
+match x {
+    ref mut mr => println!("Got a mutable reference to {}", mr),
+}
+```
 
+__8) destructuring__
 
+```rust
+struct Point {
+    x: i32,
+    y: i32,
+}
+
+let origin = Point { x: 0, y: 0 };
+
+match origin {
+    Point { y: y, .. } => println!("y is {}", y),
+}
+// y is 0
+```
+
+__9) Mix 与 Match
+
+```rust
+match x {
+    Foo { x: Some(ref name), y: None } => ...
+}
+```
 
 
 ### 5.16.方法 (Method Syntax)
 
+方法通过关键字 `impl` 语法实现：
+
+```rust
+struct Circle {
+    x: f64,
+    y: f64,
+    radius: f64,
+}
+
+impl Circle {
+    fn area(&self) -> f64 {
+        std::f64::consts::PI * (self.radius * self.radius)
+    }
+}
+
+fn main() {
+    let c = Circle { x: 0.0, y: 0.0, radius: 2.0 };
+    println!("{}", c.area());
+}
+```
+
+方法的第一个参数有三种形式：
+
+```rust
+struct Circle {
+    x: f64,
+    y: f64,
+    radius: f64,
+}
+
+impl Circle {
+    fn reference(&self) {
+       println!("taking self by reference!");
+    }
+
+    fn mutable_reference(&mut self) {
+       println!("taking self by mutable reference!");
+    }
+
+    fn takes_ownership(self) {
+       println!("taking ownership of self!");
+    }
+}
+```
+
+方法链返回 `self` ：
+
+```rust
+struct Circle {
+    x: f64,
+    y: f64,
+    radius: f64,
+}
+
+impl Circle {
+    fn area(&self) -> f64 {
+        std::f64::consts::PI * (self.radius * self.radius)
+    }
+
+    fn grow(&self, increment: f64) -> Circle {
+        Circle { x: self.x, y: self.y, radius: self.radius + increment }
+    }
+}
+
+fn main() {
+    let c = Circle { x: 0.0, y: 0.0, radius: 2.0 };
+    println!("{}", c.area());
+
+    let d = c.grow(2.0).area();
+    println!("{}", d);
+}
+```
+
+创建 `associated function` （类型其它语言的静态方法）, 不带 `self` 参数:
+
+```rust
+struct Circle {
+    x: f64,
+    y: f64,
+    radius: f64,
+}
+
+impl Circle {
+    fn new(x: f64, y: f64, radius: f64) -> Circle {
+        Circle {
+            x: x,
+            y: y,
+            radius: radius,
+        }
+    }
+}
+
+fn main() {
+    let c = Circle::new(0.0, 0.0, 2.0);
+}
+```
+
+Rust没有方法重载、命名参数或变量参数，它使用建造模式：
+
+```rust
+struct Circle {
+    x: f64,
+    y: f64,
+    radius: f64,
+}
+
+impl Circle {
+    fn area(&self) -> f64 {
+        std::f64::consts::PI * (self.radius * self.radius)
+    }
+}
+
+struct CircleBuilder {
+    x: f64,
+    y: f64,
+    radius: f64,
+}
+
+impl CircleBuilder {
+    fn new() -> CircleBuilder {
+        CircleBuilder { x: 0.0, y: 0.0, radius: 1.0, }
+    }
+
+    fn x(&mut self, coordinate: f64) -> &mut CircleBuilder {
+        self.x = coordinate;
+        self
+    }
+
+    fn y(&mut self, coordinate: f64) -> &mut CircleBuilder {
+        self.y = coordinate;
+        self
+    }
+
+    fn radius(&mut self, radius: f64) -> &mut CircleBuilder {
+        self.radius = radius;
+        self
+    }
+
+    fn finalize(&self) -> Circle {
+        Circle { x: self.x, y: self.y, radius: self.radius }
+    }
+}
+
+fn main() {
+    let c = CircleBuilder::new()
+                .x(1.0)
+                .y(2.0)
+                .radius(2.0)
+                .finalize();
+
+    println!("area: {}", c.area());
+    println!("x: {}", c.x);
+    println!("y: {}", c.y);
+}
+```
+
+
 ### 5.17.vector
+
+
 
 ### 5.18.字符串 (Strings)
 
