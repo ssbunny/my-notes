@@ -1179,7 +1179,7 @@ match origin {
 // y is 0
 ```
 
-__9) Mix 与 Match
+__9) Mix 与 Match__
 
 ```rust
 match x {
@@ -1349,11 +1349,129 @@ fn main() {
 
 ### 5.17.vector
 
+`vector` 是一个可动态增长的数组，由标准库类型 `Vec<T>` 实现。
+它在栈上分配数据，使用宏 `vec!` 创建。
+
+```rust
+let v = vec![1, 2, 3, 4, 5]; // v: Vec<i32>
+let v = vec![0; 10]; // ten zeroes
+```
+
+使用 `[]` 访问数据：
+
+```rust
+let v = vec![1, 2, 3, 4, 5];
+println!("The third element of v is {}", v[2]);
+```
+
+遍历：
+
+```rust
+let mut v = vec![1, 2, 3, 4, 5];
+
+for i in &v {
+    println!("A reference to {}", i);
+}
+
+for i in &mut v {
+    println!("A mutable reference to {}", i);
+}
+
+for i in v {
+    println!("Take ownership of the vector and its element {}", i);
+}
+```
 
 
 ### 5.18.字符串 (Strings)
 
+在Rust中，String是UTF8编码的字节流，不包含null。
+
+Rust有两种类型的字符串：  `&str` 和 `String` 。
+
+`&str` 又叫做 `string切片` ，字符串字面量是 `&'static str` 类型的：
+
+```rust
+let string = "Hello there."; // string: &'static str
+```
+
+string切片具有固定大小，不可改变。
+
+`String` 则是在栈中分配的字符串，这类字符串可增长，也是UTF8编码。
+`String` 通常通过字符串切片的 `to_string` 方法转换而来:
+
+```rust
+let mut s = "hello".to_string();
+println!("{}", s);
+
+s.push_str(", world.");
+println!("{}", s);
+```
+
+使用 `&` 可以将 `String` 强制转换成 `&str`:
+
+```rust
+fn takes_slice(slice: &str) {
+    // ...
+}
+
+fn main() {
+    let s = "hello".to_string();
+    takes_slice(&s);
+}
+```
+
+`String` 转 `&str` 的成本很低，而 `&str` 转 `String` 需要额外的内存分配。
+
+Rust字符串使用UTF8因此不能直接索引。实用方法 `chars` 与 `as_bytes`：
+
+```rust
+let hachiko = "忠犬ハチ公";
+
+for b in hachiko.as_bytes() {
+    print!("{}, ", b);
+}
+
+println!("");
+
+for c in hachiko.chars() {
+    print!("{}, ", c);
+}
+
+println!("");
+// 229, 191, 160, 231, 138, 172, 227, 131, 143, 227, 131, 129, 229, 133, 172, 
+// 忠, 犬, ハ, チ, 公, 
+```
+
+类似索引的功能如下：
+
+```rust
+let dog = hachiko.chars().nth(1);
+```
+
+拼接时，`String` 后面可以直接加 `&str`:
+
+```rust
+let hello = "hello ".to_string();
+let world = "world!";
+
+let hello_world = hello + world;
+```
+
+两个 `String` 不可以直接拼接，需要使用 `&`，
+这是因为 `&String` 可以自动转换为 `&str` ：
+
+```rust
+let hello = "hello ".to_string();
+let world = "world!".to_string();
+
+let hello_world = hello + &world;
+```
+
+
 ### 5.19.泛型 (Generics)
+
+
 
 ### 5.20.特性 (Traits)
 
