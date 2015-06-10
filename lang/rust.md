@@ -907,7 +907,7 @@ let origin = Point3d { x: 0, y: 0, z: 0 };
 let point = Point3d { z: 1, x: 2, .. origin };
 ```
 
-元组结构体：
+__元组结构体：__
 
 ```rust
 struct Color(i32, i32, i32);
@@ -1696,9 +1696,36 @@ trait FooBar : Foo {
 
 ### 5.21.Drop特性
 
+Drop特性提供了一种当值超出作用域时执行代码的方式。Drop只有一个
+`drop()` 方法，参数是 `&mut self` 。值会以其声明的反序被drop掉：
+
+```rust
+struct Firework {
+    strength: i32,
+}
+
+impl Drop for Firework {
+    fn drop(&mut self) {
+        println!("BOOM times {}!!!", self.strength);
+    }
+}
+
+fn main() {
+    let firecracker = Firework { strength: 1 };
+    let tnt = Firework { strength: 100 };
+}
+
+// BOOM times 100!!!
+// BOOM times 1!!!
+```
+
+`Drop` 通常被用作释放和 `struct` 相关的资源。
+
 
 
 ### 5.22.if let
+
+
 
 ### 5.23.
 
