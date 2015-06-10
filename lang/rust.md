@@ -1,6 +1,6 @@
 # Rust 编程语言 (2015-06)
 
-*该笔记基于 Rust 1.0.0 版本，参考 <Rust Book>*
+*该笔记基于 Rust 1.0.0 版本，参考 'Rust Book'*
 
 ## 1.介绍
 
@@ -1471,9 +1471,58 @@ let hello_world = hello + &world;
 
 ### 5.19.泛型 (Generics)
 
+泛型在类型理论中叫做**参数多态**。Rust标准库类型 `Option<T>` 即是泛型：
+
+```rust
+enum Option<T> {
+    Some(T),
+    None,
+}
+
+let x: Option<i32> = Some(5);
+```
+可以泛化多个类型：
+
+```rust
+enum Result<T, E> {
+    Ok(T),
+    Err(E),
+}
+```
+
+泛型函数：
+
+```rust
+fn takes_anything<T>(x: T) {
+    // do something with x
+}
+
+fn takes_two_of_the_same_things<T>(x: T, y: T) {
+    // ...
+}
+
+fn takes_two_things<T, U>(x: T, y: U) {
+    // ...
+}
+```
+
+泛型结构体：
+
+```rust
+struct Point<T> {
+    x: T,
+    y: T,
+}
+
+let int_origin = Point { x: 0, y: 0 };
+let float_origin = Point { x: 0.0, y: 0.0 };
+```
 
 
 ### 5.20.特性 (Traits)
+
+
+
 
 ### 5.21.Drop特性
 
