@@ -1725,13 +1725,266 @@ fn main() {
 
 ### 5.22.if let
 
+之前 `match` 的例子：
+
+```rust
+match option {
+    Some(x) => { foo(x) },
+    None => {},
+}
+```
+
+可以写成：
+
+```rust
+if option.is_some() {
+    let x = option.unwrap();
+    foo(x);
+}
+```
+
+进一步使用 `if let` 写成：
+
+```rust
+if let Some(x) = option {
+    foo(x);
+}
+```
+
+如果模式匹配成功，将会绑定值中任何恰当部分至模式的标识符上，然后计算表达式。
+如果模式不匹配，啥也不做。
+
+__while let__
+
+对应的，可以将while代码：
+
+```rust
+loop {
+    match option {
+        Some(x) => println!("{}", x),
+        _ => break,
+    }
+}
+```
+
+改写为：
+
+```rust
+while let Some(x) = option {
+    println!("{}", x);
+}
+```
 
 
-### 5.23.
+### 5.23.特性对象 (Trait Objects)
+
+当解决多态问题时，需要某种机制决定实际运行的代码，叫做**分派(dispatch)**。
+它分为**静态分派**和**动态分派**。
+Rust则通过 `trait objects` 机制来解决动态分派问题。
+
+本节示例基于以下基础代码：
+
+```rust
+trait Foo {
+    fn method(&self) -> String;
+}
+impl Foo for u8 {
+    fn method(&self) -> String { format!("u8: {}", *self) }
+}
+
+impl Foo for String {
+    fn method(&self) -> String { format!("string: {}", *self) }
+}
+```
+
+__静态分派__
+
+```rust
+fn do_something<T: Foo>(x: T) {
+    x.method();
+}
+
+fn main() {
+    let x = 5u8;
+    let y = "Hello".to_string();
+
+    do_something(x);
+    do_something(y);
+}
+```
+
+以上代码在Rust中的实现机制可以理解为：
+
+```rust
+// 通过创建特定版本的 do_something 实现
+
+fn do_something_u8(x: u8) {
+    x.method();
+}
+
+fn do_something_string(x: String) {
+    x.method();
+}
+
+fn main() {
+    let x = 5u8;
+    let y = "Hello".to_string();
+
+    do_something_u8(x);
+    do_something_string(y);
+}
+```
+
+静态分派的速度很快，但是很容易造成代码膨胀(code bloat)，
+因为每个类型都会对应一个相同的函数。
+另外，编译器很可能把代码“优化”得更慢(由于会造成指令缓存的)。
+
+__动态分派__
+
+动态分派通过 `特性对象` 实现，特性对象的确切类型只能在运行时确定，
+有时也叫做 `类型擦除`。
+
+1) 通过 `casting` 使用特性对象：
+
+```rust
+fn do_something(x: &Foo) {
+    x.method();
+}
+
+fn main() {
+    let x = 5u8;
+    do_something(&x as &Foo);
+}
+```
+
+2) 通过 `coercing` 使用特性对象：
+
+```rust
+fn do_something(x: &Foo) {
+    x.method();
+}
+
+fn main() {
+    let x = "Hello".to_string();
+    do_something(&x);
+}
+```
+
+动态分派因为调用虚拟函数而较慢。
 
 
 
 
+### 5.24.闭包 (Closures)
+
+### 5.25.一般函数调用 (Universal Function Call Syntax)
+
+问题引入(方法名相同)：
+
+```rust
+trait Foo {
+    fn f(&self);
+}
+
+trait Bar {
+    fn f(&self);
+}
+
+struct Baz;
+
+impl Foo for Baz {
+    fn f(&self) { println!("Baz’s impl of Foo"); }
+}
+
+impl Bar for Baz {
+    fn f(&self) { println!("Baz’s impl of Bar"); }
+}
+
+let b = Baz;
+```
+
+调用 `b.f()` 会报错，可以使用形如：
+
+```rust
+Foo::f(&b);
+Bar::f(&b);
+```
+
+完整的语法格式：
+
+```rust
+<Type as Trait>::method(args);
+```
+
+示例：
+
+```rust
+trait Foo {
+    fn clone(&self);
+}
+
+#[derive(Clone)]
+struct Bar;
+
+impl Foo for Bar {
+    fn clone(&self) {
+        println!("Making a clone of Bar");
+
+        <Bar as Clone>::clone(self);
+    }
+}
+```
+
+
+### 5.26.包装箱及模块 (Crates and Modules)
+
+### 5.27.const 与 static
+
+### 5.28.属性 (Attributes)
+
+### 5.29.type别名
+
+使用 `type` 关键字声明类型别名：
+
+```rust
+type Name = String;
+let x: Name = "Hello".to_string();
+```
+
+别名并不是一个新类型，它和原类型是一样的：
+
+```rust
+type Num = i32;
+
+let x: i32 = 5;
+let y: Num = 5;
+
+if x == y {
+   // ...
+}
+```
+
+在泛型中使用别名：
+
+```rust
+use std::result;
+
+enum ConcreteError {
+    Foo,
+    Bar,
+}
+
+type Result<T> = result::Result<T, ConcreteError>;
+
+// 固定一个ConcreteError，在自定义错误时很实用的一个技巧。
+```
+
+
+### 5.30.类型转换 (Casting Between Types)
+
+### 5.31.相关类型 (Associated types)
+
+### 5.32.
 
 
 
