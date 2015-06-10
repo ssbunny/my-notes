@@ -1521,10 +1521,182 @@ let float_origin = Point { x: 0.0, y: 0.0 };
 
 ### 5.20.特性 (Traits)
 
+特性定义方法签名，然后为结构体实现该特性：
 
+```rust
+struct Circle {
+    x: f64,
+    y: f64,
+    radius: f64,
+}
+
+trait HasArea {
+    fn area(&self) -> f64;
+}
+
+impl HasArea for Circle {
+    fn area(&self) -> f64 {
+        std::f64::consts::PI * (self.radius * self.radius)
+    }
+}
+```
+
+一个特性约束的例子：
+
+```rust
+trait HasArea {
+    fn area(&self) -> f64;
+}
+
+struct Circle {
+    x: f64,
+    y: f64,
+    radius: f64,
+}
+
+impl HasArea for Circle {
+    fn area(&self) -> f64 {
+        std::f64::consts::PI * (self.radius * self.radius)
+    }
+}
+
+struct Square {
+    x: f64,
+    y: f64,
+    side: f64,
+}
+
+impl HasArea for Square {
+    fn area(&self) -> f64 {
+        self.side * self.side
+    }
+}
+
+fn print_area<T: HasArea>(shape: T) {
+    println!("This shape has an area of {}", shape.area());
+}
+
+fn main() {
+    let c = Circle {
+        x: 0.0f64,
+        y: 0.0f64,
+        radius: 1.0f64,
+    };
+
+    let s = Square {
+        x: 0.0f64,
+        y: 0.0f64,
+        side: 1.0f64,
+    };
+
+    print_area(c);
+    print_area(s);
+}
+```
+
+`trait` 不仅可以用在 `struct` 中，它可以用于任意类型：
+
+```rust
+trait HasArea {
+    fn area(&self) -> f64;
+}
+
+impl HasArea for i32 {
+    fn area(&self) -> f64 {
+        println!("this is silly");
+        *self as f64
+    }
+}
+
+5.area();
+```
+
+尽管合法，但是通常是**不推荐**在原生类型中实现方法的。
+
+特性的两个约束：
+
+1. 如果 `trait` 不在当前作用域定义，它将不会生效，也就是说 `use` 过的特性才会生效。
+2. 只能实现自己定义的特性或类型，不能实现如Rust提供的特性。
+
+__多特性绑定使用 `+` 符号:__
+
+```rust
+use std::fmt::Debug;
+
+fn foo<T: Clone + Debug>(x: T) {
+    x.clone();
+    println!("{:?}", x);
+}
+// T now needs to be both Clone as well as Debug.
+```
+
+为了避免函数名与参数列表距离过远，__可以使用 `where` 子句：__
+
+```rust
+use std::fmt::Debug;
+
+fn bar<T, K>(x: T, y: K)
+    where T: Clone,
+          K: Clone + Debug {
+
+    x.clone();
+    y.clone();
+    println!("{:?}", y);
+}
+```
+
+当然，`where` 还有额外的功能：
+
+```rust
+trait ConvertTo<Output> {
+    fn convert(&self) -> Output;
+}
+
+impl ConvertTo<i64> for i32 {
+    fn convert(&self) -> i64 { *self as i64 }
+}
+
+// can be called with T == i32
+fn normal<T: ConvertTo<i64>>(x: &T) -> i64 {
+    x.convert()
+}
+
+// can be called with T == i64
+fn inverse<T>() -> T
+        // this is using ConvertTo as if it were "ConvertFrom<i32>"
+        where i32: ConvertTo<T> {
+    1i32.convert()
+}
+```
+
+__特性可以提供默认方法：__
+
+```rust
+trait Foo {
+    fn bar(&self);
+
+    fn baz(&self) { println!("We called baz."); }
+}
+```
+
+实现 Foo 特性时，必须实现 bar 方法，可选地实现 baz 方法。
+
+__特性继承__
+
+```rust
+trait Foo {
+    fn foo(&self);
+}
+
+trait FooBar : Foo {
+    fn foobar(&self);
+}
+```
 
 
 ### 5.21.Drop特性
+
+
 
 ### 5.22.if let
 
