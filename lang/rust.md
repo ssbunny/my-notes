@@ -1788,10 +1788,10 @@ Rust则通过 `trait objects` 机制来解决动态分派问题。
 trait Foo {
     fn method(&self) -> String;
 }
+
 impl Foo for u8 {
     fn method(&self) -> String { format!("u8: {}", *self) }
 }
-
 impl Foo for String {
     fn method(&self) -> String { format!("string: {}", *self) }
 }
@@ -1837,7 +1837,7 @@ fn main() {
 
 静态分派的速度很快，但是很容易造成代码膨胀(code bloat)，
 因为每个类型都会对应一个相同的函数。
-另外，编译器很可能把代码“优化”得更慢(由于会造成指令缓存的)。
+另外，编译器很可能把代码“优化”得更慢(由于会造成指令缓存的膨胀)。
 
 __动态分派__
 
