@@ -3,3 +3,5 @@
 
 # emacs back-up files
 *~
+
+.DS_Store
