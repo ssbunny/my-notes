@@ -43,19 +43,19 @@ function unsplat(fun) {
 
 1) **面向对象**以“对象”(名词)为分组依据，大对象通过小对象组合而来：
 
-<img src="img/js_1.png" width=200/>
+<img src="img/js_1.png" width=400/>
 
 **函数式**以“函数”(动词)为分组依据，大函数通过小函数组合而来：
 
-![fp](img/js_2.png)
+<img src="img/js_2.png" width=400/>
 
 2) **面向对象**通过方法调用进行对象间的交互：
 
-![oop](img/js_3.png)
+<img src="img/js_3.png" width=400/>
 
 **函数式**通过数据传递进行函数间的交互
 
-![oop](img/js_4.png)
+<img src="img/js_4.png" width=400/>
 
 #### 1.2.2.函数作为抽象单元
 
