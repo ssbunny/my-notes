@@ -7,7 +7,7 @@
 ## Program Language
 
 * [Rust](lang/rust.md)
-* [JavaScript](javascript_fp.md)
+* [JavaScript](lang/javascript_fp.md)
 
 ## OS
 
