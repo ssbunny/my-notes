@@ -120,4 +120,141 @@ second(['a','b']); //=> "b"second("fogus"); //=> "o"
 JavaScript的对象**原型**模型是一种函数式数据模型。
 比基于类的对象系统更便于使用数据。
 
+函数用作为两种数据格式间的桥梁。例如解析如下格式的数据表：
+
+```
+ name,   age, hair Merble, 35,  red Bob,    64,  blonde
+```
+使用 `underscore.js` 的函数式编程实现：
+
+```js
+function lameCSV(str) {    return _.reduce(str.split("\n"), function(table, row) {        table.push(_.map(row.split(","), function(c) { return c.trim()}));        return table;
+    }, []);};
+```
+
+#### 1.2.6.函数式JavaScript
+
+两个实用的函数：
+
+```js
+function existy(x) { return x != null };
+function truthy(x) { return (x !== false) && existy(x) };
+```
+
+基于此构建：
+
+```js
+function doWhen(cond, action) {
+    if(truthy(cond))        return action();
+    else        return undefined;
+}
+
+function executeIfHasField(target, name) {    return doWhen(existy(target[name]), function() {        var result = _.result(target, name);
+        return result;    });
+}
+
+executeIfHasField([1,2,3], 'reverse'); //=> [3, 2, 1]executeIfHasField({foo: 42}, 'foo');   //=> 42executeIfHasField([1,2,3], 'notHere'); //=> undefined
+```
+又如：
+
+```js
+[null, undefined, 1, 2, false].map(existy);
+//=> [false, false, true, true, true]
+[null, undefined, 1, 2, false].map(truthy);
+//=> [false, false, true, true, false]```
+
+函数式编程的代码形式即形如上面的例子。
+
+#### 1.2.7.速度
+
+速度确实会稍有下降，但是基于V8等新引擎，速度的影响几乎可以忽略。
+函数式编程在实践中，几乎没有速度性能问题，然而却能带来优秀的代码结构。
+
+## 2.一等函数和应用式编程
+
+### 2.1.函数作为一等公民
+
+**first-class** 意味着函数只是一个值，它可以：
+
+1) 被存储在变量中：
+
+```js
+var fortytwo = function() { return 42 };
+```
+
+2) 被存储在数组中：
+
+```js
+var fortytwos = [42, function() { return 42 }];
+```
+
+3) 被存储在对象域中：
+
+```js
+var fortytwos = {number: 42, fun: function() { return 42 }};
+```
+
+4) 按需创建：
+
+```js
+42 + (function() { return 42 })(); //=> 84
+```
+
+5) 传递给另一个函数：
+
+```js
+function weirdAdd(n, f) { return n + f() }
+weirdAdd(42, function() { return 42 });
+```
+
+6) 作为返回值：
+
+```js
+return function() { return 42 };
+```
+
+后两个叫做**高位(higher-order)函数**，它可以：
+
+* 将另一个函数作为参数；
+* 将另一个函数作为返回值。
+
+#### 2.1.1 JavaScript多范式
+
+**命令式编程(Imperative programming)**
+
+例如打印 *99 Bottles of Beer* 的歌词：
+
+```js
+var lyrics = [];for (var bottles = 99; bottles > 0; bottles--) {
+    lyrics.push(bottles + " bottles of beer on the wall");
+    lyrics.push(bottles + " bottles of beer");
+    lyrics.push("Take one down, pass it around");    
+    if (bottles > 1) {        lyrics.push((bottles - 1) + " bottles of beer on the wall.");    } else {        lyrics.push("No more bottles of beer on the wall!");    }}
+```
+
+通过函数式抽象出 `lyricSegment` 打印歌词：
+
+```js
+function lyricSegment(n) {
+    return _.chain([])        .push(n + " bottles of beer on the wall")
+        .push(n + " bottles of beer")
+        .push("Take one down, pass it around")
+        .tap(function(lyrics) {
+            if (n > 1)                lyrics.push((n - 1) + " bottles of beer on the wall.");
+            else                lyrics.push("No more bottles of beer on the wall!");         })        .value();
+}
+```
+
+抽象出最终的函数：
+
+```js
+function song(start, end, lyricGen) {
+    return _.reduce(_.range(start,end,-1),        function(acc,n) {            return acc.concat(lyricGen(n));        }, []);
+}
+
+song(99, 0, lyricSegment);```
+
+**基于原型的面向对象编程(Prototype-based object-oriented programming)**
+
+
 
