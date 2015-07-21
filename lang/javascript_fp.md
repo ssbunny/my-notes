@@ -220,7 +220,7 @@ return function() { return 42 };
 
 #### 2.1.1 JavaScript多范式
 
-**命令式编程(Imperative programming)**
+**命令式编程( Imperative programming )**
 
 例如打印 *99 Bottles of Beer* 的歌词：
 
@@ -254,7 +254,117 @@ function song(start, end, lyricGen) {
 
 song(99, 0, lyricSegment);```
 
-**基于原型的面向对象编程(Prototype-based object-oriented programming)**
+**基于原型的面向对象编程( Prototype-based object-oriented programming )**
+
+JavaScript的**原生链(prototype chain)**提供比面向类编程更低级但更优雅有效的编程方式。
+由于JavaScript面向诸多对象，需要从语义上保持自引用：
+
+```js
+var a = {name: "a", fun: function () { return this; }};
+a.fun();
+//=> {name: "a", fun: ...};
+```
+
+通过 `this` 可以指向对象自身，然而如果在对象实例以外的上下文创建函数，
+`this` 可能会指向全局变量：
+
+```js
+var bFunc = function () { return this };
+var b = {name: "b", fun: bFunc};b.fun();//=> some global object, probably Window
+```
+
+**元编程( Metaprogramming )**
+
+```js
+function Point2D(x, y) {
+    this._x = x;    this._y = y;}
+
+new Point2D(0, 1);
+//=> {_x: 0, _y: 1}
+```
+
+使用 `Function.call` 得到 `Point2D` 的构造行为：
+
+```js
+function Point3D(x, y, z) {
+    Point2D.call(this, x, y);
+    this._z = z;}
+
+new Point3D(10, -1, 100);//=> {_x: 10, _y: -1, _z: 100}```
+
+元编程和函数式编程关系不大，可以偶尔使用其技巧。
+
+### 2.2.应用式编程(Applicative Programming)
+
+> Applicative programming is defined as the calling by function B of a function A, supplied as an argument to function B originally. 
+
+三个具有代表性的函数 `map` 、 `reduce` 、 `filter` ：
+
+```js
+var nums = [1,2,3,4,5];
+function doubleAll(array) {    return _.map(array, function(n) { return n*2 });}doubleAll(nums);//=> [2, 4, 6, 8, 10]function average(array) {    var sum = _.reduce(array, function(a, b) { return a+b });
+    return sum / _.size(array);}average(nums);//=> 3function onlyEven(array) {    return _.filter(array, function(n) {        return (n%2) === 0;
+    });}onlyEven(nums);//=> [2, 4]
+```
+
+#### 2.2.1.Collection-Centric编程
+
+函数式编程非常适合对集合中的每个条目做处理：
+
+```js
+_.map({a: 1, b: 2}, _.identity); //=> [1,2]
+
+_.map({a: 1, b: 2}, function(v,k) {
+    return [k,v];});//=> [['a', 1], ['b', 2]]
+
+_.map({a: 1, b: 2}, function(v,k,coll) {
+    return [k, v, _.keys(coll)];});//=> [['a', 1, ['a', 'b']], ['b', 2, ['a', 'b']]]
+```
+
+> It is better to have 100 functions operate on one data structure than 10 functions on 10 data structures.
+
+
+#### 2.2.2.其它例子
+
+**reduceRight**
+
+`reduce` 和 `reduceRight` 方法的区别：
+
+```js
+var nums = [100,2,25];function div(x,y) { return x/y };
+_.reduce(nums, div); //=> 2_.reduceRight(nums, div); //=> 0.125
+```
+
+另一个示例：
+
+```js
+function allOf(/* funs */) {    return _.reduceRight(arguments, function(truth, f) {        return truth && f();
+    }, true);}function anyOf(/* funs */) {    return _.reduceRight(arguments, function(truth, f) {        return truth || f(); 
+    }, false);}
+```
+
+使用：
+
+```js
+function T() { return true }function F() { return false }allOf();        //=> trueallOf(T, T);    //=> trueallOf(T, T, T , T , F);    //=> false
+```
+
+**find**
+
+`find` 通过断言函数，返回集合中第一个返回 `true` 的元素：
+
+```js
+_.find(['a', 'b', 3, 'd'], _.isNumber); //=> 3
+```
+
+
+
+#### 2.2.3.
+
+### 2.3.
+
+
+
 
 
 
